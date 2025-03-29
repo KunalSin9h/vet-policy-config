@@ -49,8 +49,6 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
       </div>
 
       <div className="space-y-4">
-        <FilterTypeFactory filter={filter} onUpdate={onUpdate} />
-
         <input
           type="text"
           value={filter.summary}
@@ -59,13 +57,7 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
           className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
         />
 
-        <textarea
-          value={filter.value}
-          onChange={(e) => handleChange('value', e.target.value)}
-          placeholder="Filter expression"
-          rows={3}
-          className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
-        />
+        <FilterTypeFactory filter={filter} onUpdate={onUpdate} />
 
         <textarea
           value={filter.description}
