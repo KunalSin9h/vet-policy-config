@@ -21,7 +21,7 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
   };
 
   return (
-    <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200/60 p-6 shadow-lg shadow-slate-200/50">
+    <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-blue-100 p-6 shadow-xl shadow-blue-100/20">
       <div className="flex justify-between items-start mb-4">
         <div className="flex-1 space-y-4 mr-4">
           <input
@@ -29,12 +29,12 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
             value={filter.name}
             onChange={(e) => handleChange('name', e.target.value)}
             placeholder="Filter name"
-            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-colors"
+            className="w-full px-4 py-2.5 bg-white border border-blue-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-700 transition-colors"
           />
           <select
             value={filter.check_type}
             onChange={(e) => handleChange('check_type', e.target.value as CheckType)}
-            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-colors"
+            className="w-full px-4 py-2.5 bg-white border border-blue-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 text-slate-700 transition-colors"
           >
             {Object.entries(CHECK_TYPE_LABELS).map(([type, label]) => (
               <option key={type} value={type}>{label}</option>
@@ -43,7 +43,7 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
         </div>
         <button 
           onClick={onDelete}
-          className="px-3 py-1.5 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition-colors"
+          className="px-4 py-2 bg-red-500/90 text-white rounded-xl text-sm font-medium hover:bg-red-600 shadow-sm shadow-red-500/20 transition-all hover:shadow-md hover:shadow-red-500/25"
         >
           Delete
         </button>
@@ -55,7 +55,7 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
           value={filter.summary}
           onChange={(e) => handleChange('summary', e.target.value)}
           placeholder="Summary"
-          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-colors"
+          className="w-full px-4 py-2.5 bg-white border border-blue-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-700 transition-colors"
         />
 
         <textarea
@@ -63,7 +63,7 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
           onChange={(e) => handleChange('value', e.target.value)}
           placeholder="Filter expression"
           rows={3}
-          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-colors"
+          className="w-full px-4 py-2.5 bg-white border border-blue-100 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-700 transition-colors"
         />
 
         <textarea
@@ -71,7 +71,7 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
           onChange={(e) => handleChange('description', e.target.value)}
           placeholder="Description"
           rows={2}
-          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-colors"
+          className="w-full px-4 py-2.5 bg-white border border-blue-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-700 transition-colors"
         />
 
         <div className="space-y-2">
