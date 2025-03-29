@@ -101,102 +101,164 @@ export const ScorecardFilter: React.FC<ScorecardFilterProps> = ({
   filter,
   onUpdate,
 }) => {
-  const [activeTab, setActiveTab] = useState<'overall' | 'maintainability'>('overall');
-  const [isCustom, setIsCustom] = useState(false);
-  const [customValue, setCustomValue] = useState('');
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOverallOption, setSelectedOverallOption] = useState<string | null>(null);
+  const [selectedMaintainabilityOption, setSelectedMaintainabilityOption] = useState<string | null>(null);
+  const [isCustomOverall, setIsCustomOverall] = useState(false);
+  const [isCustomMaintainability, setIsCustomMaintainability] = useState(false);
+  const [customOverallValue, setCustomOverallValue] = useState('');
+  const [customMaintainabilityValue, setCustomMaintainabilityValue] = useState('');
 
-  const handleOptionSelect = (option: ScoreOption) => {
-    setIsCustom(false);
-    setSelectedOption(option.id);
+  const updateFilterValue = () => {
+    let overallCondition = '';
+    let maintainabilityCondition = '';
+
+    // Get overall score condition
+    if (isCustomOverall && customOverallValue) {
+      overallCondition = `overall_score ${customOverallValue}`;
+    } else if (selectedOverallOption) {
+      const option = OVERALL_SCORE_OPTIONS.find(opt => opt.id === selectedOverallOption);
+      if (option) overallCondition = option.value;
+    }
+
+    // Get maintainability condition
+    if (isCustomMaintainability && customMaintainabilityValue) {
+      maintainabilityCondition = `scorecard.scores["Maintained"] ${customMaintainabilityValue}`;
+    } else if (selectedMaintainabilityOption) {
+      const option = MAINTAINABILITY_OPTIONS.find(opt => opt.id === selectedMaintainabilityOption);
+      if (option) maintainabilityCondition = option.value;
+    }
+
+    // Combine conditions with && if both exist
+    const value = [overallCondition, maintainabilityCondition]
+      .filter(Boolean)
+      .join(' && ');
+
     onUpdate({
       ...filter,
-      value: option.value,
+      value,
     });
   };
 
-  const handleCustomValueChange = (value: string) => {
-    setCustomValue(value);
-    setSelectedOption(null);
-    onUpdate({
-      ...filter,
-      value: activeTab === 'overall' 
-        ? `overall_score ${value}`
-        : `scorecard.scores["Maintained"] ${value}`,
-    });
+  const handleOverallOptionSelect = (option: ScoreOption) => {
+    setIsCustomOverall(false);
+    setSelectedOverallOption(option.id);
+    setCustomOverallValue('');
+    setTimeout(updateFilterValue, 0);
+  };
+
+  const handleMaintainabilityOptionSelect = (option: ScoreOption) => {
+    setIsCustomMaintainability(false);
+    setSelectedMaintainabilityOption(option.id);
+    setCustomMaintainabilityValue('');
+    setTimeout(updateFilterValue, 0);
   };
 
   return (
-    <div className="space-y-4">
-      {/* Tab Selector */}
-      <div className="flex rounded-xl bg-white/5 p-1">
-        <button
-          onClick={() => setActiveTab('overall')}
-          className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-            activeTab === 'overall'
-              ? 'bg-white/10 text-slate-100'
-              : 'text-slate-400 hover:text-slate-300'
-          }`}
-        >
-          Overall Score
-        </button>
-        <button
-          onClick={() => setActiveTab('maintainability')}
-          className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-            activeTab === 'maintainability'
-              ? 'bg-white/10 text-slate-100'
-              : 'text-slate-400 hover:text-slate-300'
-          }`}
-        >
-          Project Maintainability
-        </button>
-      </div>
-
-      {/* Score Options */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        {(activeTab === 'overall' ? OVERALL_SCORE_OPTIONS : MAINTAINABILITY_OPTIONS).map((option) => (
+    <div className="space-y-6">
+      {/* Overall Score Section */}
+      <div className="space-y-4">
+        <h3 className="text-sm font-medium text-slate-300">Overall Score</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {OVERALL_SCORE_OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              onClick={() => handleOverallOptionSelect(option)}
+              className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                selectedOverallOption === option.id
+                  ? option.color
+                  : 'bg-white/5 text-slate-300 border border-slate-700/50 hover:bg-white/10'
+              }`}
+            >
+              {option.icon}
+              {option.label}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-2">
           <button
-            key={option.id}
-            onClick={() => handleOptionSelect(option)}
+            onClick={() => {
+              setIsCustomOverall(!isCustomOverall);
+              setSelectedOverallOption(null);
+              if (!isCustomOverall) setCustomOverallValue('');
+              setTimeout(updateFilterValue, 0);
+            }}
             className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
-              selectedOption === option.id
-                ? option.color
+              isCustomOverall
+                ? 'text-blue-400 bg-blue-500/20 border border-blue-500/30'
                 : 'bg-white/5 text-slate-300 border border-slate-700/50 hover:bg-white/10'
             }`}
           >
-            {option.icon}
-            {option.label}
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+            </svg>
+            Custom Overall Score
           </button>
-        ))}
+          {isCustomOverall && (
+            <input
+              type="text"
+              value={customOverallValue}
+              onChange={(e) => {
+                setCustomOverallValue(e.target.value);
+                setTimeout(updateFilterValue, 0);
+              }}
+              placeholder="Enter comparison (e.g. >= 6.5)"
+              className="flex-1 px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
+            />
+          )}
+        </div>
       </div>
 
-      {/* Custom Value Input */}
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => setIsCustom(!isCustom)}
-          className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
-            isCustom
-              ? 'text-blue-400 bg-blue-500/20 border border-blue-500/30'
-              : 'bg-white/5 text-slate-300 border border-slate-700/50 hover:bg-white/10'
-          }`}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-          </svg>
-          Custom Value
-        </button>
-
-        {isCustom && (
-          <input
-            type="text"
-            value={customValue}
-            onChange={(e) => handleCustomValueChange(e.target.value)}
-            placeholder={activeTab === 'overall' 
-              ? "Enter comparison (e.g. >= 6.5)"
-              : 'Enter comparison (e.g. >= 5)'}
-            className="flex-1 px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
-          />
-        )}
+      {/* Maintainability Score Section */}
+      <div className="space-y-4">
+        <h3 className="text-sm font-medium text-slate-300">Project Maintainability</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {MAINTAINABILITY_OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              onClick={() => handleMaintainabilityOptionSelect(option)}
+              className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                selectedMaintainabilityOption === option.id
+                  ? option.color
+                  : 'bg-white/5 text-slate-300 border border-slate-700/50 hover:bg-white/10'
+              }`}
+            >
+              {option.icon}
+              {option.label}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              setIsCustomMaintainability(!isCustomMaintainability);
+              setSelectedMaintainabilityOption(null);
+              if (!isCustomMaintainability) setCustomMaintainabilityValue('');
+              setTimeout(updateFilterValue, 0);
+            }}
+            className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+              isCustomMaintainability
+                ? 'text-blue-400 bg-blue-500/20 border border-blue-500/30'
+                : 'bg-white/5 text-slate-300 border border-slate-700/50 hover:bg-white/10'
+            }`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+            </svg>
+            Custom Maintainability Score
+          </button>
+          {isCustomMaintainability && (
+            <input
+              type="text"
+              value={customMaintainabilityValue}
+              onChange={(e) => {
+                setCustomMaintainabilityValue(e.target.value);
+                setTimeout(updateFilterValue, 0);
+              }}
+              placeholder="Enter comparison (e.g. >= 5)"
+              className="flex-1 px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
+            />
+          )}
+        </div>
       </div>
     </div>
   );
