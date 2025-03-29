@@ -10,8 +10,12 @@ const COMMON_LICENSES = [
   { id: 'MIT', name: 'MIT License', description: 'A permissive license that allows for reuse with few restrictions' },
   { id: 'Apache-2.0', name: 'Apache License 2.0', description: 'A permissive license with patent protection' },
   { id: 'GPL-3.0', name: 'GNU General Public License v3.0', description: 'A copyleft license that requires source code disclosure' },
+  { id: 'GPL-3.0-only', name: 'GNU General Public License v3.0 only', description: 'A copyleft license that requires source code disclosure (GPL-3.0 only)' },
+  { id: 'GPL-2.0', name: 'GNU General Public License v2.0', description: 'A copyleft license that requires source code disclosure' },
+  { id: 'GPL-2.0-only', name: 'GNU General Public License v2.0 only', description: 'A copyleft license that requires source code disclosure (GPL-2.0 only)' },
   { id: 'LGPL-3.0', name: 'GNU Lesser General Public License v3.0', description: 'A copyleft license that allows linking with proprietary software' },
   { id: 'BSD-3-Clause', name: 'BSD 3-Clause License', description: 'A permissive license with minimal restrictions' },
+  { id: 'BSD-3-Clause OR GPL-2.0', name: 'BSD 3-Clause OR GPL-2.0', description: 'Choice between BSD 3-Clause or GPL-2.0 licenses' },
   { id: 'BSD-2-Clause', name: 'BSD 2-Clause License', description: 'A simplified BSD license' },
   { id: 'ISC', name: 'ISC License', description: 'A simplified BSD-style license' },
   { id: 'MPL-2.0', name: 'Mozilla Public License 2.0', description: 'A file-level copyleft license' },
@@ -67,7 +71,7 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
 
   return (
     <div className="space-y-2" ref={dropdownRef}>
-      <label className="block text-sm font-medium text-slate-300">Allowed Licenses</label>
+      <label className="block text-sm font-medium text-slate-300">Contains License</label>
       
       {/* Selected Licenses */}
       <div className="flex flex-wrap gap-2 mb-2">

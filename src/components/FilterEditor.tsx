@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Filter, CHECK_TYPE_LABELS } from '../types/policy';
 import { TagInput } from './TagInput';
 import { FilterTypeFactory } from './filters/FilterTypeFactory';
@@ -14,6 +14,8 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
   onUpdate,
   onDelete,
 }) => {
+  const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
+
   const handleChange = (field: keyof Filter, value: any) => {
     onUpdate({
       ...filter,
@@ -49,43 +51,64 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
       </div>
 
       <div className="space-y-4">
-        <input
-          type="text"
-          value={filter.summary}
-          onChange={(e) => handleChange('summary', e.target.value)}
-          placeholder="Summary"
-          className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
-        />
-
         <FilterTypeFactory filter={filter} onUpdate={onUpdate} />
 
-        <textarea
-          value={filter.description}
-          onChange={(e) => handleChange('description', e.target.value)}
-          placeholder="Description"
-          rows={2}
-          className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
-        />
+        {/* Additional Information Toggle */}
+        <button
+          onClick={() => setShowAdditionalInfo(!showAdditionalInfo)}
+          className="w-full px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-slate-700/50 rounded-xl text-sm font-medium text-slate-300 transition-colors flex items-center justify-between"
+        >
+          <span>Additional Information</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-4 w-4 transition-transform ${showAdditionalInfo ? 'rotate-180' : ''}`}
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+          </svg>
+        </button>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-slate-300">Tags</label>
-          <TagInput
-            tags={filter.tags}
-            onTagsChange={(tags) => handleChange('tags', tags)}
-            placeholder="Add tags (press space or enter)"
-            className="bg-white/10"
-          />
-        </div>
+        {/* Collapsible Additional Information */}
+        {showAdditionalInfo && (
+          <div className="space-y-4 animate-fadeIn">
+            <input
+              type="text"
+              value={filter.summary || ''}
+              onChange={(e) => handleChange('summary', e.target.value)}
+              placeholder="Summary"
+              className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
+            />
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-slate-300">References</label>
-          <TagInput
-            tags={filter.references}
-            onTagsChange={(tags) => handleChange('references', tags)}
-            placeholder="Add references (press space or enter)"
-            className="bg-white/10"
-          />
-        </div>
+            <textarea
+              value={filter.description || ''}
+              onChange={(e) => handleChange('description', e.target.value)}
+              placeholder="Description"
+              rows={2}
+              className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
+            />
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-300">Tags</label>
+              <TagInput
+                tags={filter.tags || []}
+                onTagsChange={(tags) => handleChange('tags', tags)}
+                placeholder="Add tags (press space or enter)"
+                className="bg-white/10"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-300">References</label>
+              <TagInput
+                tags={filter.references || []}
+                onTagsChange={(tags) => handleChange('references', tags)}
+                placeholder="Add references (press space or enter)"
+                className="bg-white/10"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

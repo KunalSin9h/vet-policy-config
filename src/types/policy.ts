@@ -42,10 +42,10 @@ export interface Filter {
   name: string;
   value: string;
   check_type: CheckType;
-  summary: string;
-  description: string;
-  references: string[];
-  tags: string[];
+  summary?: string;
+  description?: string;
+  references?: string[];
+  tags?: string[];
   options?: {
     vulnerability?: VulnerabilityOptions;
     license?: {
