@@ -20,10 +20,10 @@ const MAX_FILTERS = 50;
 
 function App() {
   const [filterSuite, setFilterSuite] = useState<FilterSuite>({
-    name: 'SafeDep vet OSS suite',
-    description: 'Customized filter suite for vet vetting vet.',
+    name: 'vet filter suite',
+    description: "Define your security guardrails using vet's filters",
     filters: [],
-    tags: ['general', 'safedep-vet'],
+    tags: ['SecDevOps'],
   });
 
   const handleFilterSuiteChange = (field: keyof FilterSuite, value: any) => {
