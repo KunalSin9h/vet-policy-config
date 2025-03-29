@@ -51,6 +51,11 @@ export interface Filter {
     license?: {
       allowed: string[];
     };
+    package?: {
+      ecosystem: string;
+      name: string;
+      version?: string;
+    };
   };
 }
 
