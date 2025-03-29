@@ -63,7 +63,7 @@ const POPULARITY_OPTIONS: FilterOption[] = [
     id: 'low',
     label: '< 10',
     value: 'project.stars < 10',
-    color: 'text-slate-400 bg-slate-500/20 border-slate-500/30',
+    color: 'text-rose-300 bg-rose-500/20 border-rose-500/30',
   },
   {
     id: 'medium',
@@ -90,7 +90,7 @@ const FORK_OPTIONS: FilterOption[] = [
     id: 'low-forks',
     label: '< 10',
     value: 'project.forks < 10',
-    color: 'text-slate-400 bg-slate-500/20 border-slate-500/30',
+    color: 'text-rose-300 bg-rose-500/20 border-rose-500/30',
   },
   {
     id: 'medium-forks',
@@ -111,7 +111,7 @@ const ISSUES_OPTIONS: FilterOption[] = [
     id: 'low-issues',
     label: '< 10',
     value: 'project.issues < 10',
-    color: 'text-slate-400 bg-slate-500/20 border-slate-500/30',
+    color: 'text-emerald-400 bg-emerald-500/20 border-emerald-500/30',
   },
   {
     id: 'medium-issues',
