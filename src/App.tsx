@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FilterEditor } from './components/FilterEditor';
 import { YamlPreview } from './components/YamlPreview';
 import { Filter, FilterSuite, CheckType } from './types/policy';
@@ -38,6 +38,16 @@ function App() {
   });
 
   const [isFilterTypeSelectorOpen, setIsFilterTypeSelectorOpen] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      return 'Changes you made are not saved.';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   const handleFilterSuiteChange = (field: keyof FilterSuite, value: any) => {
     const trimmedValue = typeof value === 'string' ? value.trim() : value;
