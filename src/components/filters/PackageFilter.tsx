@@ -99,20 +99,21 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
     if (pkgs.length === 0) return '';
     
     return pkgs
-      .filter(pkg => pkg.ecosystem && pkg.name)
+      .filter(pkg => pkg.ecosystem)
       .map(pkg => {
-        const conditions = [
-          `      pkg.ecosystem == "${pkg.ecosystem}"`,
-          `      pkg.name == "${pkg.name}"`
-        ];
+        const conditions = [`pkg.ecosystem == "${pkg.ecosystem}"`];
         
-        if (pkg.version) {
-          conditions.push(`      pkg.version == "${pkg.version}"`);
+        if (pkg.name) {
+          conditions.push(`pkg.name == "${pkg.name}"`);
         }
         
-        return conditions.join(' &&\n');
+        if (pkg.version) {
+          conditions.push(`pkg.version == "${pkg.version}"`);
+        }
+        
+        return `      (${conditions.join(' &&\n            ')})`;
       })
-      .join(' ||\n\n') + (pkgs.length > 0 ? '\n' : '');
+      .join(' ||\n') + (pkgs.length > 0 ? '\n' : '');
   };
 
   const filteredEcosystems = ECOSYSTEMS.filter(eco =>
