@@ -104,8 +104,11 @@ function App() {
                 <button 
                   onClick={handleAddFilter}
                   disabled={filterSuite.filters.length >= MAX_FILTERS}
-                  className="px-5 py-2.5 bg-blue-500 text-white rounded-xl text-sm font-medium hover:bg-blue-600 shadow-sm shadow-blue-500/20 transition-all hover:shadow-md hover:shadow-blue-500/25 disabled:bg-slate-700/50 disabled:shadow-none disabled:cursor-not-allowed disabled:text-slate-500"
+                  className="px-3 py-1.5 bg-slate-700/50 text-slate-200 rounded-lg text-sm font-medium hover:bg-slate-600/50 transition-colors disabled:bg-slate-700/30 disabled:text-slate-500 disabled:cursor-not-allowed flex items-center gap-2"
                 >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 3a1 1 0 00-1 1v5H4a1 1 0 100 2h5v5a1 1 0 102 0v-5h5a1 1 0 100-2h-5V4a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
                   Add Filter
                 </button>
               </div>
