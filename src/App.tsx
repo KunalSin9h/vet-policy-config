@@ -17,14 +17,6 @@ const getDefaultFilter = (type: CheckType): Filter => ({
          type === CheckType.CheckTypeSecurityScorecard ? 'score > 7' :
          type === CheckType.CheckTypeMaintenance ? 'is_archived == false' : 'name == "example"',
   check_type: type,
-  summary: type === CheckType.CheckTypeVulnerability ? 'Detect known security vulnerabilities' :
-          type === CheckType.CheckTypeLicense ? 'Check for specific licenses' :
-          type === CheckType.CheckTypeSecurityScorecard ? 'Verify OpenSSF Scorecard metrics' :
-          type === CheckType.CheckTypeMaintenance ? 'Filter based on project status' : 'Filter packages by properties',
-  description: type === CheckType.CheckTypeVulnerability ? 'This filter checks for known security vulnerabilities in dependencies' :
-              type === CheckType.CheckTypeLicense ? 'This filter checks for specific package licenses' :
-              type === CheckType.CheckTypeSecurityScorecard ? 'This filter verifies package quality using OpenSSF Scorecard' :
-              type === CheckType.CheckTypeMaintenance ? 'This filter checks project-specific properties' : 'This filter checks package metadata and properties',
   references: [],
   tags: [],
   options: type === CheckType.CheckTypeVulnerability ? {
@@ -59,10 +51,10 @@ function App() {
       ...updatedFilter,
       name: updatedFilter.name.trim(),
       value: updatedFilter.value.trim(),
-      summary: updatedFilter.summary.trim(),
-      description: updatedFilter.description.trim(),
-      references: updatedFilter.references.map(ref => ref.trim()),
-      tags: updatedFilter.tags.map(tag => tag.trim()),
+      summary: updatedFilter.summary?.trim() ?? undefined,
+      description: updatedFilter.description?.trim() ?? undefined,
+      references: updatedFilter.references?.map(ref => ref.trim()) ?? [],
+      tags: updatedFilter.tags?.map(tag => tag.trim()) ?? [],
     };
     const newFilters = [...filterSuite.filters];
     newFilters[index] = trimmedFilter;

@@ -17,11 +17,11 @@ export const YamlPreview: React.FC<YamlPreviewProps> = ({ filterSuite }) => {
       `name: ${suite.name}`,
       
       // Optional fields with content
-      ...(suite.description.trim() ? ['description: |', ...suite.description.split('\n').map(line => `  ${line}`)] : []),
-      ...(suite.tags.length ? ['tags:', ...suite.tags.map(tag => `  - ${tag}`)] : []),
+      ...(suite.description?.trim() ? ['description: |', ...suite.description.split('\n').map(line => `  ${line}`)] : []),
+      ...(suite.tags?.length ? ['tags:', ...suite.tags.map(tag => `  - ${tag}`)] : []),
       
       // Filters section (only if there are filters)
-      ...(suite.filters.length ? [
+      ...(suite.filters?.length ? [
         'filters:',
         ...suite.filters.map(filter => {
           const filterLines = [
@@ -32,10 +32,10 @@ export const YamlPreview: React.FC<YamlPreviewProps> = ({ filterSuite }) => {
             ...filter.value.split('\n').map(line => '      ' + line),
             
             // Optional fields with content
-            ...(filter.summary.trim() ? ['    summary: ' + filter.summary] : []),
-            ...(filter.description.trim() ? ['    description: |', ...filter.description.split('\n').map(line => '      ' + line)] : []),
-            ...(filter.references.length ? ['    references:', ...filter.references.map(ref => '      - ' + ref)] : []),
-            ...(filter.tags.length ? ['    tags:', ...filter.tags.map(tag => '      - ' + tag)] : [])
+            ...(filter.summary?.trim() ? ['    summary: ' + filter.summary] : []),
+            ...(filter.description?.trim() ? ['    description: |', ...filter.description.split('\n').map(line => '      ' + line)] : []),
+            ...(filter.references?.length ? ['    references:', ...filter.references.map(ref => '      - ' + ref)] : []),
+            ...(filter.tags?.length ? ['    tags:', ...filter.tags.map(tag => '      - ' + tag)] : [])
           ];
           return filterLines.join('\n');
         })
