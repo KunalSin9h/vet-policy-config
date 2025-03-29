@@ -10,7 +10,7 @@ const Header: React.FC = () => {
             <h1 className="font-semibold text-slate-100 text-lg flex items-center gap-2">
               Vet <span className="text-slate-400">PolicyConfig</span>
             </h1>
-            <p className="text-xs text-slate-400">The easiest way to create vet filter suites</p>
+            <p className="text-xs text-slate-400">The easiest way to define filters and create policy file</p>
           </div>
         </div>
 
