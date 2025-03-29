@@ -25,9 +25,8 @@ export default function Header() {
             </button>
           </div>
         </div>
-
       </header>
-      <main className={`main-content ${sideMode ? 'side-mode' : ''}`}>
+      <main className={`${sideMode ? 'side-mode' : ''}`}>
         <div className="config-section">
             <div className="config-section-header">
                 <h2 className="config-section-title">Configuration</h2>
