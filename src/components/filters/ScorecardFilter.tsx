@@ -103,22 +103,23 @@ export const ScorecardFilter: React.FC<ScorecardFilterProps> = ({
 }) => {
   const [selectedOverallOption, setSelectedOverallOption] = useState<string | null>(null);
   const [selectedMaintainabilityOption, setSelectedMaintainabilityOption] = useState<string | null>(null);
-  const [isCustomOverall, setIsCustomOverall] = useState(false);
-  const [isCustomMaintainability, setIsCustomMaintainability] = useState(false);
-  const [customOverallValue, setCustomOverallValue] = useState('');
-  const [customMaintainabilityValue, setCustomMaintainabilityValue] = useState('');
 
-  const updateFilterValue = (overallOptionId: string | null) => {
-    let value = '';
+  const updateFilterValue = (overallOptionId: string | null, maintainabilityOptionId: string | null) => {
+    let conditions = [];
     
     if (overallOptionId) {
       const option = OVERALL_SCORE_OPTIONS.find(opt => opt.id === overallOptionId);
-      if (option) value = option.value;
+      if (option) conditions.push(option.value);
+    }
+
+    if (maintainabilityOptionId) {
+      const option = MAINTAINABILITY_OPTIONS.find(opt => opt.id === maintainabilityOptionId);
+      if (option) conditions.push(option.value);
     }
 
     onUpdate({
       ...filter,
-      value,
+      value: conditions.join(' && '),
     });
   };
 
@@ -126,16 +127,14 @@ export const ScorecardFilter: React.FC<ScorecardFilterProps> = ({
     // If the same option is clicked again, deselect it
     const newOptionId = selectedOverallOption === optionId ? null : optionId;
     setSelectedOverallOption(newOptionId);
-    setIsCustomOverall(false);
-    setCustomOverallValue('');
-    updateFilterValue(newOptionId);
+    updateFilterValue(newOptionId, selectedMaintainabilityOption);
   };
 
-  const handleMaintainabilityOptionSelect = (option: ScoreOption) => {
-    setIsCustomMaintainability(false);
-    setSelectedMaintainabilityOption(option.id);
-    setCustomMaintainabilityValue('');
-    setTimeout(updateFilterValue, 0);
+  const handleMaintainabilityOptionSelect = (optionId: string) => {
+    // If the same option is clicked again, deselect it
+    const newOptionId = selectedMaintainabilityOption === optionId ? null : optionId;
+    setSelectedMaintainabilityOption(newOptionId);
+    updateFilterValue(selectedOverallOption, newOptionId);
   };
 
   return (
@@ -168,7 +167,7 @@ export const ScorecardFilter: React.FC<ScorecardFilterProps> = ({
           {MAINTAINABILITY_OPTIONS.map((option) => (
             <button
               key={option.id}
-              onClick={() => handleMaintainabilityOptionSelect(option)}
+              onClick={() => handleMaintainabilityOptionSelect(option.id)}
               className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
                 selectedMaintainabilityOption === option.id
                   ? option.color
@@ -179,38 +178,6 @@ export const ScorecardFilter: React.FC<ScorecardFilterProps> = ({
               {option.label}
             </button>
           ))}
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => {
-              setIsCustomMaintainability(!isCustomMaintainability);
-              setSelectedMaintainabilityOption(null);
-              if (!isCustomMaintainability) setCustomMaintainabilityValue('');
-              setTimeout(updateFilterValue, 0);
-            }}
-            className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
-              isCustomMaintainability
-                ? 'text-blue-400 bg-blue-500/20 border border-blue-500/30'
-                : 'bg-white/5 text-slate-300 border border-slate-700/50 hover:bg-white/10'
-            }`}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-            </svg>
-            Custom Maintainability Score
-          </button>
-          {isCustomMaintainability && (
-            <input
-              type="text"
-              value={customMaintainabilityValue}
-              onChange={(e) => {
-                setCustomMaintainabilityValue(e.target.value);
-                setTimeout(updateFilterValue, 0);
-              }}
-              placeholder="Enter comparison (e.g. >= 5)"
-              className="flex-1 px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
-            />
-          )}
         </div>
       </div>
     </div>
