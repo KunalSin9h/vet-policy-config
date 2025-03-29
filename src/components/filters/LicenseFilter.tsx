@@ -57,8 +57,8 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
         },
       },
       value: newLicenses.length > 0
-        ? `license in [${newLicenses.map(id => `"${id}"`).join(', ')}]`
-        : 'license == "MIT"',
+        ? newLicenses.map(id => `      licenses.exists(p, p == "${id}")`).join(' ||\n') + (newLicenses.length > 1 ? '\n' : '')
+        : '      licenses.exists(p, p == "MIT")',
     });
   };
 
