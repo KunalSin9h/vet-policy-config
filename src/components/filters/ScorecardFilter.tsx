@@ -18,7 +18,7 @@ const OVERALL_SCORE_OPTIONS: ScoreOption[] = [
   {
     id: 'high',
     label: 'High Scorecard',
-    value: 'overall_score > 7.0',
+    value: 'scorecard.score >= 8.0',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path fillRule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
@@ -29,7 +29,7 @@ const OVERALL_SCORE_OPTIONS: ScoreOption[] = [
   {
     id: 'medium',
     label: 'Medium Scorecard',
-    value: 'overall_score < 5.0',
+    value: 'scorecard.score >= 5.0 && scorecard.score < 8.0',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
@@ -40,7 +40,7 @@ const OVERALL_SCORE_OPTIONS: ScoreOption[] = [
   {
     id: 'low',
     label: 'Low Scorecard',
-    value: 'overall_score < 3.0',
+    value: 'scorecard.score < 5.0',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path fillRule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -108,30 +108,13 @@ export const ScorecardFilter: React.FC<ScorecardFilterProps> = ({
   const [customOverallValue, setCustomOverallValue] = useState('');
   const [customMaintainabilityValue, setCustomMaintainabilityValue] = useState('');
 
-  const updateFilterValue = () => {
-    let overallCondition = '';
-    let maintainabilityCondition = '';
-
-    // Get overall score condition
-    if (isCustomOverall && customOverallValue) {
-      overallCondition = `overall_score ${customOverallValue}`;
-    } else if (selectedOverallOption) {
-      const option = OVERALL_SCORE_OPTIONS.find(opt => opt.id === selectedOverallOption);
-      if (option) overallCondition = option.value;
+  const updateFilterValue = (overallOptionId: string | null) => {
+    let value = '';
+    
+    if (overallOptionId) {
+      const option = OVERALL_SCORE_OPTIONS.find(opt => opt.id === overallOptionId);
+      if (option) value = option.value;
     }
-
-    // Get maintainability condition
-    if (isCustomMaintainability && customMaintainabilityValue) {
-      maintainabilityCondition = `scorecard.scores["Maintained"] ${customMaintainabilityValue}`;
-    } else if (selectedMaintainabilityOption) {
-      const option = MAINTAINABILITY_OPTIONS.find(opt => opt.id === selectedMaintainabilityOption);
-      if (option) maintainabilityCondition = option.value;
-    }
-
-    // Combine conditions with && if both exist
-    const value = [overallCondition, maintainabilityCondition]
-      .filter(Boolean)
-      .join(' && ');
 
     onUpdate({
       ...filter,
@@ -139,11 +122,13 @@ export const ScorecardFilter: React.FC<ScorecardFilterProps> = ({
     });
   };
 
-  const handleOverallOptionSelect = (option: ScoreOption) => {
+  const handleOverallOptionSelect = (optionId: string) => {
+    // If the same option is clicked again, deselect it
+    const newOptionId = selectedOverallOption === optionId ? null : optionId;
+    setSelectedOverallOption(newOptionId);
     setIsCustomOverall(false);
-    setSelectedOverallOption(option.id);
     setCustomOverallValue('');
-    setTimeout(updateFilterValue, 0);
+    updateFilterValue(newOptionId);
   };
 
   const handleMaintainabilityOptionSelect = (option: ScoreOption) => {
@@ -162,7 +147,7 @@ export const ScorecardFilter: React.FC<ScorecardFilterProps> = ({
           {OVERALL_SCORE_OPTIONS.map((option) => (
             <button
               key={option.id}
-              onClick={() => handleOverallOptionSelect(option)}
+              onClick={() => handleOverallOptionSelect(option.id)}
               className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
                 selectedOverallOption === option.id
                   ? option.color
