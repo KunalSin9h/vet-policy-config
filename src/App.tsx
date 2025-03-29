@@ -120,7 +120,7 @@ function App() {
                 />
               ))}
               {filterSuite.filters.length === 0 && (
-                <div className="text-center py-8 text-gray-500 bg-white rounded-lg border border-gray-200 shadow-sm">
+                <div className="text-center py-8 text-gray-500 bg-gray-50/80 backdrop-blur-sm rounded-lg border border-gray-200 shadow-sm">
                   No filters yet. Click "Add Filter" to create one.
                 </div>
               )}
