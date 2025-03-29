@@ -52,9 +52,11 @@ export interface Filter {
       allowed: string[];
     };
     package?: {
-      ecosystem: string;
-      name: string;
-      version?: string;
+      packages: Array<{
+        ecosystem: string;
+        name: string;
+        version?: string;
+      }>;
     };
   };
 }
