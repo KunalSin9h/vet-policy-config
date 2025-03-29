@@ -15,7 +15,7 @@ const getDefaultFilter = (type: CheckType): Filter => ({
   value: type === CheckType.CheckTypeVulnerability ? 'is_vulnerability == true' :
          type === CheckType.CheckTypeLicense ? 'license == "MIT"' :
          type === CheckType.CheckTypeSecurityScorecard ? 'score > 7' :
-         type === CheckType.CheckTypeMaintenance ? 'is_archived == false' : 'name == "example"',
+         type === CheckType.CheckTypeMaintenance ? 'is_archived == false' : '',
   check_type: type,
   references: [],
   tags: [],
