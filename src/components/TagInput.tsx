@@ -15,14 +15,18 @@ export const TagInput: React.FC<TagInputProps> = ({
 }) => {
   const [input, setInput] = useState('');
 
+  const addTag = (value: string) => {
+    const newTag = value.trim();
+    if (newTag && !tags.includes(newTag)) {
+      onTagsChange([...tags, newTag]);
+    }
+    setInput('');
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
-      const newTag = input.trim();
-      if (newTag && !tags.includes(newTag)) {
-        onTagsChange([...tags, newTag]);
-      }
-      setInput('');
+      addTag(input);
     } else if (e.key === 'Backspace' && !input && tags.length > 0) {
       onTagsChange(tags.slice(0, -1));
     }
@@ -31,6 +35,12 @@ export const TagInput: React.FC<TagInputProps> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Remove leading/trailing whitespace as user types
     setInput(e.target.value.trimStart());
+  };
+
+  const handleBlur = () => {
+    if (input.trim()) {
+      addTag(input);
+    }
   };
 
   const removeTag = (tagToRemove: string) => {
@@ -59,6 +69,7 @@ export const TagInput: React.FC<TagInputProps> = ({
         value={input}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
+        onBlur={handleBlur}
         placeholder={tags.length === 0 ? placeholder : ''}
         className="flex-1 min-w-[100px] outline-none text-sm"
       />

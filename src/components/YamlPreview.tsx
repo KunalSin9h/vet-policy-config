@@ -13,21 +13,31 @@ export const YamlPreview: React.FC<YamlPreviewProps> = ({ filterSuite }) => {
 
   const generateYAML = (suite: FilterSuite): string => {
     const yaml = [
+      // Required fields
       `name: ${suite.name}`,
-      'description: |',
-      ...suite.description.split('\n').map(line => `  ${line}`),
+      
+      // Optional fields with content
+      ...(suite.description.trim() ? ['description: |', ...suite.description.split('\n').map(line => `  ${line}`)] : []),
       ...(suite.tags.length ? ['tags:', ...suite.tags.map(tag => `  - ${tag}`)] : []),
+      
+      // Filters section (required)
       'filters:',
-      ...suite.filters.map(filter => [
-        '  - name: ' + filter.name,
-        '    check_type: ' + filter.check_type,
-        '    summary: ' + filter.summary,
-        '    value: |',
-        ...filter.value.split('\n').map(line => '      ' + line),
-        ...(filter.description ? ['    description: |', ...filter.description.split('\n').map(line => '      ' + line)] : []),
-        ...(filter.references.length ? ['    references:', ...filter.references.map(ref => '      - ' + ref)] : []),
-        ...(filter.tags.length ? ['    tags:', ...filter.tags.map(tag => '      - ' + tag)] : [])
-      ].join('\n'))
+      ...suite.filters.map(filter => {
+        const filterLines = [
+          // Required fields
+          '  - name: ' + filter.name,
+          '    check_type: ' + filter.check_type,
+          '    value: |',
+          ...filter.value.split('\n').map(line => '      ' + line),
+          
+          // Optional fields with content
+          ...(filter.summary.trim() ? ['    summary: ' + filter.summary] : []),
+          ...(filter.description.trim() ? ['    description: |', ...filter.description.split('\n').map(line => '      ' + line)] : []),
+          ...(filter.references.length ? ['    references:', ...filter.references.map(ref => '      - ' + ref)] : []),
+          ...(filter.tags.length ? ['    tags:', ...filter.tags.map(tag => '      - ' + tag)] : [])
+        ];
+        return filterLines.join('\n');
+      })
     ].join('\n');
     return yaml;
   };
