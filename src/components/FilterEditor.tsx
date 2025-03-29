@@ -31,15 +31,10 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
             placeholder="Filter name"
             className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
           />
-          <select
-            value={filter.check_type}
-            onChange={(e) => handleChange('check_type', e.target.value as CheckType)}
-            className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 text-slate-100 transition-colors"
-          >
-            {Object.entries(CHECK_TYPE_LABELS).map(([type, label]) => (
-              <option key={type} value={type} className="bg-slate-800 text-slate-100">{label}</option>
-            ))}
-          </select>
+          <div className="flex items-center gap-2 px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl">
+            <span className="text-sm text-slate-400">Type:</span>
+            <span className="text-sm font-medium text-slate-100">{CHECK_TYPE_LABELS[filter.check_type]}</span>
+          </div>
         </div>
         <button 
           onClick={onDelete}
