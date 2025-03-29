@@ -146,27 +146,27 @@ export const ProjectFilter: React.FC<ProjectFilterProps> = ({
     
     if (repoOption) {
       const repo = REPO_OPTIONS.find(opt => opt.id === repoOption);
-      if (repo) conditions.push(repo.value);
+      if (repo) conditions.push(`      ${repo.value}`);
     }
     
     if (popularityOption) {
       const popularity = POPULARITY_OPTIONS.find(opt => opt.id === popularityOption);
-      if (popularity) conditions.push(`projects.exists(p, ${popularity.value})`);
+      if (popularity) conditions.push(`      projects.exists(p, ${popularity.value})`);
     }
 
     if (forkOption) {
       const forkCount = FORK_OPTIONS.find(opt => opt.id === forkOption);
-      if (forkCount) conditions.push(`projects.exists(p, ${forkCount.value})`);
+      if (forkCount) conditions.push(`      projects.exists(p, ${forkCount.value})`);
     }
 
     if (issuesOption) {
       const issuesCount = ISSUES_OPTIONS.find(opt => opt.id === issuesOption);
-      if (issuesCount) conditions.push(`projects.exists(p, ${issuesCount.value})`);
+      if (issuesCount) conditions.push(`      projects.exists(p, ${issuesCount.value})`);
     }
 
     onUpdate({
       ...filter,
-      value: conditions.length > 0 ? conditions.join(' && ') : '',
+      value: conditions.length > 0 ? conditions.join(' &&\n') + (conditions.length > 1 ? '\n' : '') : '',
     });
   };
 
