@@ -48,6 +48,9 @@ export interface Filter {
   tags: string[];
   options?: {
     vulnerability?: VulnerabilityOptions;
+    license?: {
+      allowed: string[];
+    };
   };
 }
 
