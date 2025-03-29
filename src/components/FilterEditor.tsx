@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, CheckType, CHECK_TYPE_LABELS } from '../types/policy';
+import { Filter, CheckType, CHECK_TYPE_LABELS, VulnerabilitySeverity, VULNERABILITY_SEVERITY_LABELS } from '../types/policy';
 import { TagInput } from './TagInput';
 
 interface FilterEditorProps {
@@ -18,6 +18,57 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
       ...filter,
       [field]: value,
     });
+  };
+
+  const handleVulnerabilityOptionChange = (severity: VulnerabilitySeverity) => {
+    const currentSeverities = filter.options?.vulnerability?.severity || [];
+    const newSeverities = currentSeverities.includes(severity)
+      ? currentSeverities.filter(s => s !== severity)
+      : [...currentSeverities, severity];
+    
+    onUpdate({
+      ...filter,
+      options: {
+        ...filter.options,
+        vulnerability: {
+          severity: newSeverities,
+        },
+      },
+      value: newSeverities.length > 0
+        ? `severity in [${newSeverities.join(', ')}]`
+        : 'is_vulnerability == true',
+    });
+  };
+
+  const renderVulnerabilityOptions = () => {
+    const selectedSeverities = filter.options?.vulnerability?.severity || [];
+    
+    return (
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-slate-300">Severity Levels</label>
+        <div className="grid grid-cols-2 gap-2">
+          {Object.entries(VULNERABILITY_SEVERITY_LABELS).map(([severity, label]) => (
+            <button
+              key={severity}
+              onClick={() => handleVulnerabilityOptionChange(severity as VulnerabilitySeverity)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                selectedSeverities.includes(severity as VulnerabilitySeverity)
+                  ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                  : 'bg-white/5 text-slate-300 border border-slate-700/50 hover:bg-white/10'
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${
+                severity === VulnerabilitySeverity.Critical ? 'bg-red-500' :
+                severity === VulnerabilitySeverity.High ? 'bg-orange-500' :
+                severity === VulnerabilitySeverity.Medium ? 'bg-yellow-500' :
+                'bg-blue-500'
+              }`} />
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -48,6 +99,8 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
       </div>
 
       <div className="space-y-4">
+        {filter.check_type === CheckType.CheckTypeVulnerability && renderVulnerabilityOptions()}
+
         <input
           type="text"
           value={filter.summary}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FilterEditor } from './components/FilterEditor';
 import { YamlPreview } from './components/YamlPreview';
-import { Filter, FilterSuite, CheckType } from './types/policy';
+import { Filter, FilterSuite, CheckType, VulnerabilitySeverity } from './types/policy';
 import { TagInput } from './components/TagInput';
 import { FilterTypeSelector } from './components/FilterTypeSelector';
 import Header from './components/Header';
@@ -27,6 +27,11 @@ const getDefaultFilter = (type: CheckType): Filter => ({
               type === CheckType.CheckTypeMaintenance ? 'This filter checks project-specific properties' : 'This filter checks package metadata and properties',
   references: [],
   tags: [],
+  options: type === CheckType.CheckTypeVulnerability ? {
+    vulnerability: {
+      severity: [VulnerabilitySeverity.Critical, VulnerabilitySeverity.High],
+    },
+  } : undefined,
 });
 
 const MAX_FILTERS = 50;

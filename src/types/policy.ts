@@ -9,6 +9,20 @@ export enum CheckType {
   CheckTypeOther = 'CheckTypeOther',
 }
 
+export enum VulnerabilitySeverity {
+  Critical = 'CRITICAL',
+  High = 'HIGH',
+  Medium = 'MEDIUM',
+  Low = 'LOW',
+}
+
+export const VULNERABILITY_SEVERITY_LABELS: Record<VulnerabilitySeverity, string> = {
+  [VulnerabilitySeverity.Critical]: 'Critical',
+  [VulnerabilitySeverity.High]: 'High',
+  [VulnerabilitySeverity.Medium]: 'Medium',
+  [VulnerabilitySeverity.Low]: 'Low',
+};
+
 export const CHECK_TYPE_LABELS: Record<CheckType, string> = {
   [CheckType.CheckTypeUnknown]: 'Unknown',
   [CheckType.CheckTypeVulnerability]: 'Vulnerability',
@@ -20,6 +34,10 @@ export const CHECK_TYPE_LABELS: Record<CheckType, string> = {
   [CheckType.CheckTypeOther]: 'Other',
 };
 
+export interface VulnerabilityOptions {
+  severity: VulnerabilitySeverity[];
+}
+
 export interface Filter {
   name: string;
   value: string;
@@ -28,6 +46,9 @@ export interface Filter {
   description: string;
   references: string[];
   tags: string[];
+  options?: {
+    vulnerability?: VulnerabilityOptions;
+  };
 }
 
 export interface FilterSuite {
