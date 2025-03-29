@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FilterSuite } from '../types/policy';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-yaml';
+import '../styles/prism-custom.css';
 
 interface YamlPreviewProps {
   filterSuite: FilterSuite;
 }
 
 export const YamlPreview: React.FC<YamlPreviewProps> = ({ filterSuite }) => {
+  const codeRef = useRef<HTMLElement>(null);
+
   const generateYAML = (suite: FilterSuite): string => {
     const yaml = [
       `name: ${suite.name}`,
@@ -26,6 +31,12 @@ export const YamlPreview: React.FC<YamlPreviewProps> = ({ filterSuite }) => {
     ].join('\n');
     return yaml;
   };
+
+  useEffect(() => {
+    if (codeRef.current) {
+      Prism.highlightElement(codeRef.current);
+    }
+  }, [filterSuite]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(generateYAML(filterSuite));
@@ -62,11 +73,13 @@ export const YamlPreview: React.FC<YamlPreviewProps> = ({ filterSuite }) => {
           </button>
         </div>
       </div>
-      <pre className="bg-gray-50 border border-gray-200 rounded-md p-4 overflow-x-auto">
-        <code className="text-sm font-mono whitespace-pre-wrap break-words text-gray-800">
-          {generateYAML(filterSuite)}
-        </code>
-      </pre>
+      <div className="relative">
+        <pre className="!bg-[#272822] rounded-md !p-4 overflow-x-auto">
+          <code ref={codeRef} className="language-yaml !text-sm">
+            {generateYAML(filterSuite)}
+          </code>
+        </pre>
+      </div>
     </div>
   );
 }; 
