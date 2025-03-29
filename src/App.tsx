@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FilterEditor } from './components/FilterEditor';
 import { YamlPreview } from './components/YamlPreview';
 import { Filter, FilterSuite, CheckType } from './types/policy';
+import { TagInput } from './components/TagInput';
 import Header from './components/Header';
 
 const defaultFilter: Filter = {
@@ -45,16 +46,12 @@ function App() {
     handleFilterSuiteChange('filters', [...filterSuite.filters, { ...defaultFilter }]);
   };
 
-  const handleTagsChange = (value: string) => {
-    handleFilterSuiteChange('tags', value.split(',').map(tag => tag.trim()).filter(Boolean));
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       
       <main className={`max-w-7xl mx-auto px-4 pt-24 ${sideMode ? 'grid grid-cols-1 lg:grid-cols-2 gap-6' : 'space-y-6'}`}>
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-start mb-6">
           <div className="flex-1 space-y-4 mr-4">
             <input
               type="text"
@@ -70,24 +67,25 @@ function App() {
               rows={2}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-            <input
-              type="text"
-              value={filterSuite.tags.join(', ')}
-              onChange={(e) => handleTagsChange(e.target.value)}
-              placeholder="Tags (comma-separated)"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            <div className="space-y-2">
+              <label className="block text-sm text-gray-700">Filter Suite Tags</label>
+              <TagInput
+                tags={filterSuite.tags}
+                onTagsChange={(tags) => handleFilterSuiteChange('tags', tags)}
+                placeholder="Add tags (press space or enter)"
+              />
+            </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 ml-4">
             <button 
               onClick={() => setSideMode(!sideMode)}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md text-sm font-medium hover:bg-gray-700 transition-colors"
+              className="px-4 py-2 bg-gray-600 text-white rounded-md text-sm font-medium hover:bg-gray-700 transition-colors whitespace-nowrap"
             >
               {sideMode ? 'Single view' : 'Side-by-side'}
             </button>
             <button 
               onClick={handleAddFilter}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors whitespace-nowrap"
             >
               Add Filter
             </button>
