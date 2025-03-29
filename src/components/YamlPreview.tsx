@@ -92,7 +92,7 @@ export const YamlPreview: React.FC<YamlPreviewProps> = ({ filterSuite }) => {
           </button>
         </div>
       </div>
-      <div className="flex-1 overflow-auto bg-slate-800/50 rounded-b-2xl">
+      <div className="flex-1 overflow-auto bg-slate-800/50 rounded-b-2xl [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-500/50 [&::-webkit-scrollbar-track]:bg-transparent hover:[&::-webkit-scrollbar-thumb]:bg-slate-500/70">
         <pre className="!m-0 !bg-transparent !p-4">
           <code ref={codeRef} className="language-yaml !text-sm">
             {generateYAML(filterSuite)}
