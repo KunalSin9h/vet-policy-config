@@ -52,8 +52,8 @@ function App() {
       ...updatedFilter,
       name: updatedFilter.name.trim(),
       value: updatedFilter.value.trim(),
-      summary: updatedFilter.summary?.trim() ?? undefined,
-      description: updatedFilter.description?.trim() ?? undefined,
+      summary: updatedFilter.summary ?? undefined,
+      description: updatedFilter.description ?? undefined,
       references: updatedFilter.references?.map(ref => ref.trim()) ?? [],
       tags: updatedFilter.tags?.map(tag => tag.trim()) ?? [],
     };
