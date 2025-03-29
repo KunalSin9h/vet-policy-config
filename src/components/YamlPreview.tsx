@@ -47,7 +47,7 @@ export const YamlPreview: React.FC<YamlPreviewProps> = ({ filterSuite }) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'filter-suite.yaml';
+    a.download = 'policy.yml';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
