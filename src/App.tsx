@@ -3,18 +3,31 @@ import { FilterEditor } from './components/FilterEditor';
 import { YamlPreview } from './components/YamlPreview';
 import { Filter, FilterSuite, CheckType } from './types/policy';
 import { TagInput } from './components/TagInput';
+import { FilterTypeSelector } from './components/FilterTypeSelector';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
-const defaultFilter: Filter = {
-  name: 'Vulnerability Check',
-  value: 'is_vulnerability == true',
-  check_type: CheckType.CheckTypeVulnerability,
-  summary: 'Detect known security vulnerabilities',
-  description: 'This filter checks for known security vulnerabilities in dependencies',
+const getDefaultFilter = (type: CheckType): Filter => ({
+  name: type === CheckType.CheckTypeVulnerability ? 'Vulnerability Check' :
+        type === CheckType.CheckTypeLicense ? 'License Check' :
+        type === CheckType.CheckTypeSecurityScorecard ? 'Scorecard Check' :
+        type === CheckType.CheckTypeMaintenance ? 'Project Check' : 'Package Check',
+  value: type === CheckType.CheckTypeVulnerability ? 'is_vulnerability == true' :
+         type === CheckType.CheckTypeLicense ? 'license == "MIT"' :
+         type === CheckType.CheckTypeSecurityScorecard ? 'score > 7' :
+         type === CheckType.CheckTypeMaintenance ? 'is_archived == false' : 'name == "example"',
+  check_type: type,
+  summary: type === CheckType.CheckTypeVulnerability ? 'Detect known security vulnerabilities' :
+          type === CheckType.CheckTypeLicense ? 'Check for specific licenses' :
+          type === CheckType.CheckTypeSecurityScorecard ? 'Verify OpenSSF Scorecard metrics' :
+          type === CheckType.CheckTypeMaintenance ? 'Filter based on project status' : 'Filter packages by properties',
+  description: type === CheckType.CheckTypeVulnerability ? 'This filter checks for known security vulnerabilities in dependencies' :
+              type === CheckType.CheckTypeLicense ? 'This filter checks for specific package licenses' :
+              type === CheckType.CheckTypeSecurityScorecard ? 'This filter verifies package quality using OpenSSF Scorecard' :
+              type === CheckType.CheckTypeMaintenance ? 'This filter checks project-specific properties' : 'This filter checks package metadata and properties',
   references: [],
   tags: [],
-};
+});
 
 const MAX_FILTERS = 50;
 
@@ -25,6 +38,8 @@ function App() {
     filters: [],
     tags: ['SecDevOps'],
   });
+
+  const [isFilterTypeSelectorOpen, setIsFilterTypeSelectorOpen] = useState(false);
 
   const handleFilterSuiteChange = (field: keyof FilterSuite, value: any) => {
     const trimmedValue = typeof value === 'string' ? value.trim() : value;
@@ -54,16 +69,16 @@ function App() {
     handleFilterSuiteChange('filters', newFilters);
   };
 
-  const handleAddFilter = () => {
+  const handleAddFilter = (type: CheckType) => {
     if (filterSuite.filters.length >= MAX_FILTERS) {
       alert('Maximum limit of 50 filters reached');
       return;
     }
-    handleFilterSuiteChange('filters', [...filterSuite.filters, { ...defaultFilter }]);
+    handleFilterSuiteChange('filters', [...filterSuite.filters, getDefaultFilter(type)]);
   };
 
   return (
-     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 flex flex-col">
       <Header />
       
       <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 pt-24 pb-16">
@@ -102,7 +117,7 @@ function App() {
                   Filters: {filterSuite.filters.length} / {MAX_FILTERS}
                 </div>
                 <button 
-                  onClick={handleAddFilter}
+                  onClick={() => setIsFilterTypeSelectorOpen(true)}
                   disabled={filterSuite.filters.length >= MAX_FILTERS}
                   className="px-3 py-1.5 bg-slate-700/50 text-slate-200 rounded-lg text-sm font-medium hover:bg-slate-600/50 transition-colors disabled:bg-slate-700/30 disabled:text-slate-500 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer"
                 >
@@ -139,6 +154,15 @@ function App() {
       </main>
 
       <Footer />
+
+      <FilterTypeSelector
+        isOpen={isFilterTypeSelectorOpen}
+        onClose={() => setIsFilterTypeSelectorOpen(false)}
+        onSelect={(type) => {
+          handleAddFilter(type);
+          setIsFilterTypeSelectorOpen(false);
+        }}
+      />
     </div>
   );
 }
