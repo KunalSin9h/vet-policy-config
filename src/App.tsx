@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FilterEditor } from './components/FilterEditor';
 import { YamlPreview } from './components/YamlPreview';
-import { Filter, FilterSuite, CheckType, VulnerabilitySeverity } from './types/policy';
+import { Filter, FilterSuite, CheckType } from './types/policy';
 import { TagInput } from './components/TagInput';
 import { FilterTypeSelector } from './components/FilterTypeSelector';
 import Header from './components/Header';
