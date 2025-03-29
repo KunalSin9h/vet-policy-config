@@ -4,6 +4,7 @@ import { YamlPreview } from './components/YamlPreview';
 import { Filter, FilterSuite, CheckType } from './types/policy';
 import { TagInput } from './components/TagInput';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 const defaultFilter: Filter = {
   name: '',
@@ -62,10 +63,10 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
       
-      <main className="max-w-[1440px] mx-auto px-4 pt-24 grid grid-cols-2 gap-6">
+      <main className="flex-1 max-w-[1440px] mx-auto px-4 pt-24 pb-16 grid grid-cols-2 gap-6">
         {/* Left Column - Filter Configuration */}
         <div className="space-y-6">
           <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm space-y-6">
@@ -108,7 +109,7 @@ function App() {
             </div>
           </div>
 
-          <div className="space-y-4 overflow-y-auto">
+          <div className="space-y-4 overflow-y-auto mb-12">
             {filterSuite.filters.map((filter, index) => (
               <FilterEditor
                 key={index}
@@ -126,10 +127,12 @@ function App() {
         </div>
 
         {/* Right Column - YAML Preview */}
-        <div className="sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto">
+        <div className="sticky top-24 h-[calc(100vh-8rem)] overflow-y-auto">
           <YamlPreview filterSuite={filterSuite} />
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }
