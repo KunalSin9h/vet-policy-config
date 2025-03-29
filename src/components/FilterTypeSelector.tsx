@@ -39,7 +39,7 @@ const FILTER_TYPES = [
     )
   },
   {
-    type: CheckType.CheckTypeMaintenance,
+    type: CheckType.CheckTypeProject,
     label: 'Projects',
     description: 'Filter based on project-specific criteria',
     icon: (

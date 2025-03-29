@@ -6,6 +6,7 @@ export enum CheckType {
   CheckTypeMaintenance = 'CheckTypeMaintenance',
   CheckTypeSecurityScorecard = 'CheckTypeSecurityScorecard',
   CheckTypeLicense = 'CheckTypeLicense',
+  CheckTypeProject = 'CheckTypeProject',
   CheckTypeOther = 'CheckTypeOther',
 }
 
@@ -31,6 +32,7 @@ export const CHECK_TYPE_LABELS: Record<CheckType, string> = {
   [CheckType.CheckTypeMaintenance]: 'Maintenance',
   [CheckType.CheckTypeSecurityScorecard]: 'Security Scorecard',
   [CheckType.CheckTypeLicense]: 'License',
+  [CheckType.CheckTypeProject]: 'Project',
   [CheckType.CheckTypeOther]: 'Other',
 };
 
