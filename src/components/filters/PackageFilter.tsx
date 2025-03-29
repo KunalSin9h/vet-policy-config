@@ -100,10 +100,19 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
     
     return pkgs
       .filter(pkg => pkg.ecosystem && pkg.name)
-      .map(pkg => pkg.version 
-        ? `package == "${pkg.ecosystem}/${pkg.name}@${pkg.version}"`
-        : `package == "${pkg.ecosystem}/${pkg.name}"`)
-      .join(' && ');
+      .map(pkg => {
+        const conditions = [
+          `      pkg.ecosystem == "${pkg.ecosystem}"`,
+          `      pkg.name == "${pkg.name}"`
+        ];
+        
+        if (pkg.version) {
+          conditions.push(`      pkg.version == "${pkg.version}"`);
+        }
+        
+        return conditions.join(' &&\n');
+      })
+      .join(' ||\n\n') + (pkgs.length > 0 ? '\n' : '');
   };
 
   const filteredEcosystems = ECOSYSTEMS.filter(eco =>
