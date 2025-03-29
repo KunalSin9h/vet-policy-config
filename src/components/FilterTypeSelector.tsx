@@ -9,7 +9,7 @@ interface FilterTypeSelectorProps {
 
 const FILTER_TYPES = [
   {
-    type: CheckType.CheckTypePopularity,
+    type: CheckType.CheckTypeVulnerability,
     label: 'Package',
     description: 'Filter based on package metadata and properties',
     icon: (
