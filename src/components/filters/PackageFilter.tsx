@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Filter } from '../../types/policy';
+import { PackageRegistryLogo } from './PackageRegistryLogo';
 
 interface PackageFilterProps {
   filter: Filter;
@@ -18,9 +19,6 @@ const ECOSYSTEMS = [
   { id: 'maven', name: 'Maven', description: 'Java Package Repository' },
   { id: 'golang', name: 'Go', description: 'Go Package Registry' },
   { id: 'cargo', name: 'Cargo', description: 'Rust Package Registry' },
-  { id: 'composer', name: 'Composer', description: 'PHP Package Manager' },
-  { id: 'nuget', name: 'NuGet', description: '.NET Package Registry' },
-  { id: 'rubygems', name: 'RubyGems', description: 'Ruby Package Manager' }
 ];
 
 export const PackageFilter: React.FC<PackageFilterProps> = ({
@@ -121,7 +119,8 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
           <div key={index} className="flex items-center gap-2">
             {/* Ecosystem */}
             <div className="w-1/4">
-              <div className="px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm text-slate-100">
+              <div className="px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm text-slate-100 flex items-center gap-2">
+                <PackageRegistryLogo ecosystem={pkg.ecosystem} className="h-4 w-4" />
                 {ECOSYSTEMS.find(e => e.id === pkg.ecosystem)?.name || 'Unknown'}
               </div>
             </div>
@@ -186,10 +185,13 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
               <button
                 key={ecosystem.id}
                 onClick={() => handleEcosystemSelect(ecosystem.id)}
-                className="w-full px-4 py-2.5 text-left hover:bg-white/5 transition-colors text-slate-100"
+                className="w-full px-4 py-2.5 text-left hover:bg-white/5 transition-colors text-slate-100 flex items-center gap-2"
               >
-                <div className="text-sm font-medium">{ecosystem.name}</div>
-                <div className="text-xs text-slate-400 mt-0.5">{ecosystem.description}</div>
+                <PackageRegistryLogo ecosystem={ecosystem.id} className="h-4 w-4 text-slate-300" />
+                <div>
+                  <div className="text-sm font-medium">{ecosystem.name}</div>
+                  <div className="text-xs text-slate-400 mt-0.5">{ecosystem.description}</div>
+                </div>
               </button>
             ))}
             {filteredEcosystems.length === 0 && (
