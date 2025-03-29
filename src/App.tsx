@@ -70,41 +70,41 @@ function App() {
         <div className="block lg:grid lg:grid-cols-2 lg:gap-6">
           {/* Filter Configuration */}
           <div className="space-y-6 mb-6 lg:mb-0">
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-blue-100 p-6 shadow-xl shadow-blue-100/20 space-y-6">
+            <div className="bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-sm rounded-2xl border border-slate-700/30 p-6 shadow-xl shadow-slate-900/20 space-y-6">
               <div className="space-y-4">
                 <input
                   type="text"
                   value={filterSuite.name}
                   onChange={(e) => handleFilterSuiteChange('name', e.target.value)}
                   placeholder="Filter Suite Name"
-                  className="w-full px-4 py-2.5 bg-white border border-blue-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-700 transition-colors"
+                  className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
                 />
                 <textarea
                   value={filterSuite.description}
                   onChange={(e) => handleFilterSuiteChange('description', e.target.value)}
                   placeholder="Filter Suite Description"
                   rows={2}
-                  className="w-full px-4 py-2.5 bg-white border border-blue-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-700 transition-colors"
+                  className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
                 />
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">Filter Suite Tags</label>
+                  <label className="block text-sm font-medium text-slate-300">Filter Suite Tags</label>
                   <TagInput
                     tags={filterSuite.tags}
                     onTagsChange={(tags) => handleFilterSuiteChange('tags', tags)}
                     placeholder="Add tags (press space or enter)"
-                    className="bg-white"
+                    className="bg-white/10"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-between items-center pt-4 border-t border-blue-100/60">
-                <div className="text-sm text-slate-600">
+              <div className="flex justify-between items-center pt-4 border-t border-slate-700/30">
+                <div className="text-sm text-slate-400">
                   Filters: {filterSuite.filters.length} / {MAX_FILTERS}
                 </div>
                 <button 
                   onClick={handleAddFilter}
                   disabled={filterSuite.filters.length >= MAX_FILTERS}
-                  className="px-5 py-2.5 bg-blue-500 text-white rounded-xl text-sm font-medium hover:bg-blue-600 shadow-sm shadow-blue-500/20 transition-all hover:shadow-md hover:shadow-blue-500/25 disabled:bg-slate-200 disabled:shadow-none disabled:cursor-not-allowed disabled:text-slate-400"
+                  className="px-5 py-2.5 bg-blue-500 text-white rounded-xl text-sm font-medium hover:bg-blue-600 shadow-sm shadow-blue-500/20 transition-all hover:shadow-md hover:shadow-blue-500/25 disabled:bg-slate-700/50 disabled:shadow-none disabled:cursor-not-allowed disabled:text-slate-500"
                 >
                   Add Filter
                 </button>
@@ -121,7 +121,7 @@ function App() {
                 />
               ))}
               {filterSuite.filters.length === 0 && (
-                <div className="text-center py-12 text-slate-500 bg-white/90 backdrop-blur-sm rounded-2xl border border-blue-100 shadow-xl shadow-blue-100/20">
+                <div className="text-center py-12 text-slate-400 bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-sm rounded-2xl border border-slate-700/30 shadow-xl shadow-slate-900/20">
                   No filters yet. Click "Add Filter" to create one.
                 </div>
               )}
@@ -129,7 +129,7 @@ function App() {
           </div>
 
           {/* YAML Preview */}
-          <div className="lg:sticky lg:top-24 h-fit bg-white/90 backdrop-blur-sm rounded-2xl border border-blue-100 shadow-xl shadow-blue-100/20">
+          <div className="lg:sticky lg:top-24 h-fit bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-sm rounded-2xl border border-slate-700/30 shadow-xl shadow-slate-900/20">
             <YamlPreview filterSuite={filterSuite} />
           </div>
         </div>
