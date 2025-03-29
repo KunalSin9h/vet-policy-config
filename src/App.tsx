@@ -13,16 +13,16 @@ const getDefaultFilter = (type: CheckType): Filter => ({
         type === CheckType.CheckTypeSecurityScorecard ? 'Scorecard Check' :
         type === CheckType.CheckTypeMaintenance ? 'Project Check' :
         type === CheckType.CheckTypeProject ? 'Project Check' : 'Package Check',
-  value: type === CheckType.CheckTypeVulnerability ? 'is_vulnerability == true' :
-         type === CheckType.CheckTypeLicense ? 'license == "MIT"' :
-         type === CheckType.CheckTypeSecurityScorecard ? 'score > 7' :
-         type === CheckType.CheckTypeMaintenance ? 'is_archived == false' : '',
+  value: type === CheckType.CheckTypeVulnerability ? '' :
+         type === CheckType.CheckTypeLicense ? '' :
+         type === CheckType.CheckTypeSecurityScorecard ? '' :
+         type === CheckType.CheckTypeMaintenance ? '' : '',
   check_type: type,
   references: [],
   tags: [],
   options: type === CheckType.CheckTypeVulnerability ? {
     vulnerability: {
-      severity: [VulnerabilitySeverity.Critical, VulnerabilitySeverity.High],
+      severity: [],
     },
   } : undefined,
 });
