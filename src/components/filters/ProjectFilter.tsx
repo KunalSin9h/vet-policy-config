@@ -14,7 +14,7 @@ interface RepoOption {
   color: string;
 }
 
-interface PopularityOption {
+interface FilterOption {
   id: string;
   label: string;
   value: string;
@@ -58,7 +58,7 @@ const REPO_OPTIONS: RepoOption[] = [
   },
 ];
 
-const POPULARITY_OPTIONS: PopularityOption[] = [
+const POPULARITY_OPTIONS: FilterOption[] = [
   {
     id: 'low',
     label: '< 10',
@@ -85,14 +85,40 @@ const POPULARITY_OPTIONS: PopularityOption[] = [
   },
 ];
 
+const FORK_OPTIONS: FilterOption[] = [
+  {
+    id: 'low-forks',
+    label: '< 10',
+    value: 'project.forks < 10',
+    color: 'text-slate-400 bg-slate-500/20 border-slate-500/30',
+  },
+  {
+    id: 'medium-forks',
+    label: '10-50',
+    value: 'project.forks >= 10 && project.forks < 50',
+    color: 'text-blue-400 bg-blue-500/20 border-blue-500/30',
+  },
+  {
+    id: 'high-forks',
+    label: '50+',
+    value: 'project.forks >= 50',
+    color: 'text-purple-400 bg-purple-500/20 border-purple-500/30',
+  },
+];
+
 export const ProjectFilter: React.FC<ProjectFilterProps> = ({
   filter,
   onUpdate,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectedPopularity, setSelectedPopularity] = useState<string | null>(null);
+  const [selectedForkCount, setSelectedForkCount] = useState<string | null>(null);
 
-  const updateFilterValue = (repoOption: string | null, popularityOption: string | null) => {
+  const updateFilterValue = (
+    repoOption: string | null, 
+    popularityOption: string | null,
+    forkOption: string | null
+  ) => {
     const conditions: string[] = [];
     
     if (repoOption) {
@@ -105,6 +131,11 @@ export const ProjectFilter: React.FC<ProjectFilterProps> = ({
       if (popularity) conditions.push(popularity.value);
     }
 
+    if (forkOption) {
+      const forkCount = FORK_OPTIONS.find(opt => opt.id === forkOption);
+      if (forkCount) conditions.push(forkCount.value);
+    }
+
     onUpdate({
       ...filter,
       value: conditions.length > 0 ? conditions.join(' && ') : '',
@@ -114,13 +145,19 @@ export const ProjectFilter: React.FC<ProjectFilterProps> = ({
   const handleOptionSelect = (option: RepoOption) => {
     const newOption = selectedOption === option.id ? null : option.id;
     setSelectedOption(newOption);
-    updateFilterValue(newOption, selectedPopularity);
+    updateFilterValue(newOption, selectedPopularity, selectedForkCount);
   };
 
-  const handlePopularitySelect = (option: PopularityOption) => {
+  const handlePopularitySelect = (option: FilterOption) => {
     const newPopularity = selectedPopularity === option.id ? null : option.id;
     setSelectedPopularity(newPopularity);
-    updateFilterValue(selectedOption, newPopularity);
+    updateFilterValue(selectedOption, newPopularity, selectedForkCount);
+  };
+
+  const handleForkCountSelect = (option: FilterOption) => {
+    const newForkCount = selectedForkCount === option.id ? null : option.id;
+    setSelectedForkCount(newForkCount);
+    updateFilterValue(selectedOption, selectedPopularity, newForkCount);
   };
 
   return (
@@ -168,6 +205,29 @@ export const ProjectFilter: React.FC<ProjectFilterProps> = ({
           ))}
         </div>
       </div>
+
+      {/* Fork Count Section */}
+      <div className="space-y-4">
+        <h3 className="text-sm font-medium text-slate-300">Fork Count</h3>
+        <div className="grid grid-cols-3 gap-2">
+          {FORK_OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              onClick={() => handleForkCountSelect(option)}
+              className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                selectedForkCount === option.id
+                  ? option.color
+                  : 'bg-white/5 text-slate-300 border border-slate-700/50 hover:bg-white/10'
+              }`}
+            >
+              {option.label}
+              <svg viewBox="0 0 128 128" className="h-4 w-4">
+                <path fill="currentColor" d="M26.666 0C11.97 0 0 11.97 0 26.666c0 12.87 9.181 23.651 21.334 26.13v37.87c0 11.77 9.68 21.334 21.332 21.334h.195c1.302 9.023 9.1 16 18.473 16C71.612 128 80 119.612 80 109.334s-8.388-18.668-18.666-18.668c-9.372 0-17.17 6.977-18.473 16h-.195c-8.737 0-16-7.152-16-16V63.779a18.514 18.514 0 0 0 13.24 5.555h2.955c1.303 9.023 9.1 16 18.473 16 9.372 0 17.169-6.977 18.47-16h11.057c1.303 9.023 9.1 16 18.473 16 10.278 0 18.666-8.39 18.666-18.668C128 56.388 119.612 48 109.334 48c-9.373 0-17.171 6.977-18.473 16H79.805c-1.301-9.023-9.098-16-18.471-16s-17.171 6.977-18.473 16h-2.955c-6.433 0-11.793-4.589-12.988-10.672 14.58-.136 26.416-12.05 26.416-26.662C53.334 11.97 41.362 0 26.666 0zm0 5.334A21.292 21.292 0 0 1 48 26.666 21.294 21.294 0 0 1 26.666 48 21.292 21.292 0 0 1 5.334 26.666 21.29 21.29 0 0 1 26.666 5.334zm-5.215 7.541C18.67 12.889 16 15.123 16 18.166v17.043c0 4.043 4.709 6.663 8.145 4.533l13.634-8.455c3.257-2.02 3.274-7.002.032-9.045l-13.635-8.59a5.024 5.024 0 0 0-2.725-.777zm-.117 5.291 13.635 8.588-13.635 8.455V18.166zm40 35.168a13.29 13.29 0 0 1 13.332 13.332A13.293 13.293 0 0 1 61.334 80 13.294 13.294 0 0 1 48 66.666a13.293 13.293 0 0 1 13.334-13.332zm48 0a13.29 13.29 0 0 1 13.332 13.332A13.293 13.293 0 0 1 109.334 80 13.294 13.294 0 0 1 96 66.666a13.293 13.293 0 0 1 13.334-13.332zm-42.568 6.951a2.667 2.667 0 0 0-1.887.78l-6.3 6.294-2.093-2.084a2.667 2.667 0 0 0-3.771.006 2.667 2.667 0 0 0 .008 3.772l3.974 3.96a2.667 2.667 0 0 0 3.766-.001l8.185-8.174a2.667 2.667 0 0 0 .002-3.772 2.667 2.667 0 0 0-1.884-.78zm48 0a2.667 2.667 0 0 0-1.887.78l-6.3 6.294-2.093-2.084a2.667 2.667 0 0 0-3.771.006 2.667 2.667 0 0 0 .008 3.772l3.974 3.96a2.667 2.667 0 0 0 3.766-.001l8.185-8.174a2.667 2.667 0 0 0 .002-3.772 2.667 2.667 0 0 0-1.884-.78zM61.334 96a13.293 13.293 0 0 1 13.332 13.334 13.29 13.29 0 0 1-13.332 13.332A13.293 13.293 0 0 1 48 109.334 13.294 13.294 0 0 1 61.334 96zM56 105.334c-2.193 0-4 1.807-4 4 0 2.195 1.808 4 4 4s4-1.805 4-4c0-2.193-1.807-4-4-4zm10.666 0c-2.193 0-4 1.807-4 4 0 2.195 1.808 4 4 4s4-1.805 4-4c0-2.193-1.807-4-4-4zM56 108c.75 0 1.334.585 1.334 1.334 0 .753-.583 1.332-1.334 1.332-.75 0-1.334-.58-1.334-1.332 0-.75.585-1.334 1.334-1.334zm10.666 0c.75 0 1.334.585 1.334 1.334 0 .753-.583 1.332-1.334 1.332-.75 0-1.332-.58-1.332-1.332 0-.75.583-1.334 1.332-1.334z" />
+              </svg>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
-}; 
+};
