@@ -62,25 +62,25 @@ const POPULARITY_OPTIONS: PopularityOption[] = [
   {
     id: 'low',
     label: '< 10',
-    value: 'projects.exists(p, p.stars < 10)',
+    value: 'project.stars < 10',
     color: 'text-slate-400 bg-slate-500/20 border-slate-500/30',
   },
   {
     id: 'medium',
     label: '10-100',
-    value: 'projects.exists(p, p.stars >= 10 && p.stars < 100)',
+    value: 'project.stars >= 10 && project.stars < 100',
     color: 'text-blue-400 bg-blue-500/20 border-blue-500/30',
   },
   {
     id: 'high',
     label: '100+',
-    value: 'projects.exists(p, p.stars >= 100)',
+    value: 'project.stars >= 100',
     color: 'text-purple-400 bg-purple-500/20 border-purple-500/30',
   },
   {
     id: 'very-high',
     label: '1000+',
-    value: 'projects.exists(p, p.stars >= 1000)',
+    value: 'project.stars >= 1000',
     color: 'text-orange-400 bg-orange-500/20 border-orange-500/30',
   },
 ];
@@ -92,20 +92,35 @@ export const ProjectFilter: React.FC<ProjectFilterProps> = ({
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectedPopularity, setSelectedPopularity] = useState<string | null>(null);
 
-  const handleOptionSelect = (option: RepoOption) => {
-    setSelectedOption(option.id);
+  const updateFilterValue = (repoOption: string | null, popularityOption: string | null) => {
+    const conditions: string[] = [];
+    
+    if (repoOption) {
+      const repo = REPO_OPTIONS.find(opt => opt.id === repoOption);
+      if (repo) conditions.push(repo.value);
+    }
+    
+    if (popularityOption) {
+      const popularity = POPULARITY_OPTIONS.find(opt => opt.id === popularityOption);
+      if (popularity) conditions.push(popularity.value);
+    }
+
     onUpdate({
       ...filter,
-      value: option.value,
+      value: conditions.length > 0 ? conditions.join(' && ') : '',
     });
   };
 
+  const handleOptionSelect = (option: RepoOption) => {
+    const newOption = selectedOption === option.id ? null : option.id;
+    setSelectedOption(newOption);
+    updateFilterValue(newOption, selectedPopularity);
+  };
+
   const handlePopularitySelect = (option: PopularityOption) => {
-    setSelectedPopularity(option.id);
-    onUpdate({
-      ...filter,
-      value: option.value,
-    });
+    const newPopularity = selectedPopularity === option.id ? null : option.id;
+    setSelectedPopularity(newPopularity);
+    updateFilterValue(selectedOption, newPopularity);
   };
 
   return (
