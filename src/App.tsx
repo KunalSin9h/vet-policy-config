@@ -67,9 +67,9 @@ function App() {
       <Header />
       
       <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 pt-24 pb-16">
-        <div className="grid grid-cols-2 gap-6 min-w-[1200px]">
-          {/* Left Column - Filter Configuration */}
-          <div className="min-w-[600px] space-y-6">
+        <div className="block lg:grid lg:grid-cols-2 lg:gap-6">
+          {/* Filter Configuration */}
+          <div className="space-y-6 mb-6 lg:mb-0">
             <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200/60 p-6 shadow-lg shadow-slate-200/50 space-y-6">
               <div className="space-y-4">
                 <input
@@ -111,7 +111,7 @@ function App() {
               </div>
             </div>
 
-            <div className="space-y-4 overflow-y-auto mb-12">
+            <div className="space-y-4">
               {filterSuite.filters.map((filter, index) => (
                 <FilterEditor
                   key={index}
@@ -128,8 +128,8 @@ function App() {
             </div>
           </div>
 
-          {/* Right Column - YAML Preview */}
-          <div className="sticky top-24 h-[calc(100vh-8rem)] overflow-y-auto min-w-[500px]">
+          {/* YAML Preview */}
+          <div className="lg:sticky lg:top-24 h-fit bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200/60 shadow-lg shadow-slate-200/50">
             <YamlPreview filterSuite={filterSuite} />
           </div>
         </div>
