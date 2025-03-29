@@ -109,17 +109,19 @@ export const ScorecardFilter: React.FC<ScorecardFilterProps> = ({
     
     if (overallOptionId) {
       const option = OVERALL_SCORE_OPTIONS.find(opt => opt.id === overallOptionId);
-      if (option) conditions.push(option.value);
+      if (option) conditions.push(`      ${option.value}`);
     }
 
     if (maintainabilityOptionId) {
       const option = MAINTAINABILITY_OPTIONS.find(opt => opt.id === maintainabilityOptionId);
-      if (option) conditions.push(option.value);
+      if (option) conditions.push(`\n      ${option.value}`);
     }
 
     onUpdate({
       ...filter,
-      value: conditions.join(' && '),
+      value: conditions.length > 0 
+        ? conditions.join(' &&') + (conditions.length > 1 ? '\n' : '')
+        : '',
     });
   };
 
