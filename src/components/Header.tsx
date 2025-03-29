@@ -8,7 +8,7 @@ const Header: React.FC = () => {
           <img src="/logo.png" alt="logo" className="w-10 h-10" />
           <div>
             <h1 className="font-semibold text-slate-100 text-lg flex items-center gap-2">
-              Vet <span className="text-slate-400">PolicyConfig</span>
+              Vet <span className="bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 text-transparent bg-clip-text animate-gradient">PolicyConfig</span>
             </h1>
             <p className="text-xs text-slate-400">The easiest way to define filters and create policy file</p>
           </div>
