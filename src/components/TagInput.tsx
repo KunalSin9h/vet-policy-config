@@ -48,17 +48,17 @@ export const TagInput: React.FC<TagInputProps> = ({
   };
 
   return (
-    <div className={`flex flex-wrap gap-2 p-2 border border-gray-300 rounded-md ${className}`}>
+    <div className={`flex flex-wrap gap-2 p-2 border border-slate-600 rounded-xl ${className}`}>
       {tags.map((tag, index) => (
         <span
           key={index}
-          className="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-sm"
+          className="flex items-center gap-1 px-2 py-1 bg-slate-600 text-slate-100 rounded-lg text-sm font-medium"
         >
           {tag}
           <button
             type="button"
             onClick={() => removeTag(tag)}
-            className="text-blue-600 hover:text-blue-800 font-bold"
+            className="text-slate-300 hover:text-white transition-colors ml-1"
           >
             ×
           </button>
@@ -71,7 +71,7 @@ export const TagInput: React.FC<TagInputProps> = ({
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
         placeholder={tags.length === 0 ? placeholder : ''}
-        className="flex-1 min-w-[100px] outline-none text-sm"
+        className="flex-1 min-w-[100px] bg-transparent text-slate-100 placeholder-slate-400 outline-none text-sm"
       />
     </div>
   );
