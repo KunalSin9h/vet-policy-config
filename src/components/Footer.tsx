@@ -10,20 +10,12 @@ const Footer: React.FC = () => {
           </div>
           <div className="flex gap-4">
             <a 
-              href="https://github.com/safedep/vet" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-sm text-slate-400 hover:text-blue-400 transition-colors"
-            >
-              GitHub
-            </a>
-            <a 
               href="https://safedep.io" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-sm text-slate-400 hover:text-blue-400 transition-colors"
             >
-              SafeDep
+              SafeDep.io
             </a>
           </div>
         </div>
