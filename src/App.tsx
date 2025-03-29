@@ -15,8 +15,9 @@ const defaultFilter: Filter = {
   tags: [],
 };
 
+const MAX_FILTERS = 50;
+
 function App() {
-  const [sideMode, setSideMode] = useState(false);
   const [filterSuite, setFilterSuite] = useState<FilterSuite>({
     name: 'SafeDep vet OSS suite',
     description: 'Customized filter suite for vet vetting vet.',
@@ -25,15 +26,25 @@ function App() {
   });
 
   const handleFilterSuiteChange = (field: keyof FilterSuite, value: any) => {
+    const trimmedValue = typeof value === 'string' ? value.trim() : value;
     setFilterSuite(prev => ({
       ...prev,
-      [field]: value,
+      [field]: trimmedValue,
     }));
   };
 
   const handleFilterUpdate = (index: number, updatedFilter: Filter) => {
+    const trimmedFilter = {
+      ...updatedFilter,
+      name: updatedFilter.name.trim(),
+      value: updatedFilter.value.trim(),
+      summary: updatedFilter.summary.trim(),
+      description: updatedFilter.description.trim(),
+      references: updatedFilter.references.map(ref => ref.trim()),
+      tags: updatedFilter.tags.map(tag => tag.trim()),
+    };
     const newFilters = [...filterSuite.filters];
-    newFilters[index] = updatedFilter;
+    newFilters[index] = trimmedFilter;
     handleFilterSuiteChange('filters', newFilters);
   };
 
@@ -43,6 +54,10 @@ function App() {
   };
 
   const handleAddFilter = () => {
+    if (filterSuite.filters.length >= MAX_FILTERS) {
+      alert('Maximum limit of 50 filters reached');
+      return;
+    }
     handleFilterSuiteChange('filters', [...filterSuite.filters, { ...defaultFilter }]);
   };
 
@@ -50,65 +65,68 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <main className={`max-w-7xl mx-auto px-4 pt-24 ${sideMode ? 'grid grid-cols-1 lg:grid-cols-2 gap-6' : 'space-y-6'}`}>
-        <div className="flex justify-between items-start mb-6">
-          <div className="flex-1 space-y-4 mr-4">
-            <input
-              type="text"
-              value={filterSuite.name}
-              onChange={(e) => handleFilterSuiteChange('name', e.target.value)}
-              placeholder="Filter Suite Name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <textarea
-              value={filterSuite.description}
-              onChange={(e) => handleFilterSuiteChange('description', e.target.value)}
-              placeholder="Filter Suite Description"
-              rows={2}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <div className="space-y-2">
-              <label className="block text-sm text-gray-700">Filter Suite Tags</label>
-              <TagInput
-                tags={filterSuite.tags}
-                onTagsChange={(tags) => handleFilterSuiteChange('tags', tags)}
-                placeholder="Add tags (press space or enter)"
+      <main className="max-w-[1440px] mx-auto px-4 pt-24 grid grid-cols-2 gap-6">
+        {/* Left Column - Filter Configuration */}
+        <div className="space-y-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm space-y-6">
+            <div className="space-y-4">
+              <input
+                type="text"
+                value={filterSuite.name}
+                onChange={(e) => handleFilterSuiteChange('name', e.target.value)}
+                placeholder="Filter Suite Name"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+              <textarea
+                value={filterSuite.description}
+                onChange={(e) => handleFilterSuiteChange('description', e.target.value)}
+                placeholder="Filter Suite Description"
+                rows={2}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <div className="space-y-2">
+                <label className="block text-sm text-gray-700">Filter Suite Tags</label>
+                <TagInput
+                  tags={filterSuite.tags}
+                  onTagsChange={(tags) => handleFilterSuiteChange('tags', tags)}
+                  placeholder="Add tags (press space or enter)"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+              <div className="text-sm text-gray-600">
+                Filters: {filterSuite.filters.length} / {MAX_FILTERS}
+              </div>
+              <button 
+                onClick={handleAddFilter}
+                disabled={filterSuite.filters.length >= MAX_FILTERS}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                Add Filter
+              </button>
             </div>
           </div>
-          <div className="flex gap-2 ml-4">
-            <button 
-              onClick={() => setSideMode(!sideMode)}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md text-sm font-medium hover:bg-gray-700 transition-colors whitespace-nowrap"
-            >
-              {sideMode ? 'Single view' : 'Side-by-side'}
-            </button>
-            <button 
-              onClick={handleAddFilter}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors whitespace-nowrap"
-            >
-              Add Filter
-            </button>
+
+          <div className="space-y-4 overflow-y-auto">
+            {filterSuite.filters.map((filter, index) => (
+              <FilterEditor
+                key={index}
+                filter={filter}
+                onUpdate={(updatedFilter) => handleFilterUpdate(index, updatedFilter)}
+                onDelete={() => handleFilterDelete(index)}
+              />
+            ))}
+            {filterSuite.filters.length === 0 && (
+              <div className="text-center py-8 text-gray-500 bg-white rounded-lg border border-gray-200 shadow-sm">
+                No filters yet. Click "Add Filter" to create one.
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="space-y-4">
-          {filterSuite.filters.map((filter, index) => (
-            <FilterEditor
-              key={index}
-              filter={filter}
-              onUpdate={(updatedFilter) => handleFilterUpdate(index, updatedFilter)}
-              onDelete={() => handleFilterDelete(index)}
-            />
-          ))}
-          {filterSuite.filters.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              No filters yet. Click "Add Filter" to create one.
-            </div>
-          )}
-        </div>
-        
-        <div className="mt-6">
+        {/* Right Column - YAML Preview */}
+        <div className="sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto">
           <YamlPreview filterSuite={filterSuite} />
         </div>
       </main>

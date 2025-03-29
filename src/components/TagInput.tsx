@@ -28,6 +28,11 @@ export const TagInput: React.FC<TagInputProps> = ({
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Remove leading/trailing whitespace as user types
+    setInput(e.target.value.trimStart());
+  };
+
   const removeTag = (tagToRemove: string) => {
     onTagsChange(tags.filter(tag => tag !== tagToRemove));
   };
@@ -52,7 +57,7 @@ export const TagInput: React.FC<TagInputProps> = ({
       <input
         type="text"
         value={input}
-        onChange={(e) => setInput(e.target.value)}
+        onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder={tags.length === 0 ? placeholder : ''}
         className="flex-1 min-w-[100px] outline-none text-sm"
