@@ -65,7 +65,7 @@ export const YamlPreview: React.FC<YamlPreviewProps> = ({ filterSuite }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-900/90 rounded-xl border border-slate-700/30 shadow-lg">
+    <div className="flex flex-col h-full bg-slate-900/90 rounded-2xl border border-slate-700/30 shadow-lg">
       <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/30">
         <h2 className="text-sm font-medium text-slate-100">YAML Preview</h2>
         <div className="flex gap-2">
@@ -90,7 +90,7 @@ export const YamlPreview: React.FC<YamlPreviewProps> = ({ filterSuite }) => {
           </button>
         </div>
       </div>
-      <div className="flex-1 overflow-auto bg-slate-800/50">
+      <div className="flex-1 overflow-auto bg-slate-800/50 rounded-b-2xl">
         <pre className="!m-0 !bg-transparent !p-4">
           <code ref={codeRef} className="language-yaml !text-sm">
             {generateYAML(filterSuite)}
