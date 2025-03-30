@@ -13,7 +13,7 @@ export const FilterTypeFactory: React.FC<FilterTypeProps> = ({ filter, onUpdate 
       return <VulnerabilityFilter filter={filter} onUpdate={onUpdate} />;
     case CheckType.CheckTypeLicense:
       return <LicenseFilter filter={filter} onUpdate={onUpdate} />;
-    case CheckType.CheckTypePopularity:
+    case CheckType.CheckTypeMalware:
       return <PackageFilter filter={filter} onUpdate={onUpdate} />;
     case CheckType.CheckTypeSecurityScorecard:
       return <ScorecardFilter filter={filter} onUpdate={onUpdate} />;
