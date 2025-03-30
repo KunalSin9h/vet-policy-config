@@ -67,10 +67,14 @@ function App() {
   }, []);
 
   const handleFilterSuiteChange = (field: keyof FilterSuite, value: any) => {
-    const trimmedValue = typeof value === 'string' ? value.trim() : value;
+    // Only trim if the field is not name or description
+    const processedValue = typeof value === 'string' && field !== 'name' && field !== 'description'
+      ? value.trim()
+      : value;
+    
     setFilterSuite(prev => ({
       ...prev,
-      [field]: trimmedValue,
+      [field]: processedValue,
     }));
   };
 
