@@ -60,7 +60,7 @@ function App() {
   const handleFilterUpdate = (index: number, updatedFilter: Filter) => {
     const trimmedFilter = {
       ...updatedFilter,
-      name: updatedFilter.name.trim(),
+      name: updatedFilter.name,
       value: updatedFilter.value.trim(),
       summary: updatedFilter.summary ?? undefined,
       description: updatedFilter.description ?? undefined,
