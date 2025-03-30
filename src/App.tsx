@@ -43,7 +43,7 @@ function App() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
+      setIsMobile(window.innerWidth < 414);
     };
 
     window.addEventListener('resize', handleResize);
@@ -127,7 +127,7 @@ function App() {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-slate-300">Filter Suite Tags</label>
                   <TagInput
-                    tags={filterSuite.tags}
+                    tags={filterSuite.tags} 
                     onTagsChange={(tags) => handleFilterSuiteChange('tags', tags)}
                     placeholder="Add tags (press space or enter)"
                     className="bg-white/10"
@@ -139,7 +139,7 @@ function App() {
                 <div className="text-sm text-slate-400">
                   Filters: {filterSuite.filters.length} / {MAX_FILTERS}
                 </div>
-                <button 
+                <button  
                   onClick={() => setIsFilterTypeSelectorOpen(true)}
                   disabled={filterSuite.filters.length >= MAX_FILTERS}
                   className="px-3 py-1.5 bg-slate-700/50 text-slate-200 rounded-lg text-sm font-medium hover:bg-slate-600/50 transition-colors disabled:bg-slate-700/30 disabled:text-slate-500 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer"

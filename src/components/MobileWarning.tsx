@@ -9,13 +9,13 @@ const MobileWarning: React.FC = () => {
         </svg>
         <h1 className="text-xl font-semibold text-slate-100 mb-2">Desktop Only</h1>
         <p className="text-slate-300 mb-4">
-          PolicyConfig is a dashboard tool designed for desktop use only. Please access it from a desktop or laptop computer for the best experience.
+          PolicyConfig is a dashboard tool designed for desktop use only. Please access it from a device with a screen width larger than 414 pixels for the best experience.
         </p>
         <div className="flex items-center justify-center gap-2 text-sm text-slate-400">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clipRule="evenodd" />
           </svg>
-          Recommended: 1024px or larger screen
+          Recommended: &gt;414px screen width
         </div>
       </div>
     </div>
