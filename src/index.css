@@ -10,4 +10,17 @@
   code, pre, .font-mono {
     font-family: 'JetBrains Mono', monospace;
   }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-3;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-700/[0.16] rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-600/50 rounded-full hover:bg-slate-600/75;
+  }
 }
