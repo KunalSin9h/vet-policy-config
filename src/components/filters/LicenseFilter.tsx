@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Filter } from '../../types/policy';
+import { Dropdown } from '../Dropdown';
 
 interface LicenseFilterProps {
   filter: Filter;
@@ -95,55 +96,57 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
       </div>
 
       {/* Search Input and Dropdown */}
-      <div className="relative">
-        <div className="relative">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onFocus={() => setIsOpen(true)}
-            placeholder="Search licenses..."
-            className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
-          />
-          {isOpen && (
-            <button
-              onClick={() => setIsOpen(false)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
-          )}
-        </div>
-
-        {isOpen && (
-          <div className="absolute top-full mt-4 left-0 z-10 w-full bg-slate-800 border border-slate-700/50 rounded-xl shadow-xl max-h-[240px] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-600/50 [&::-webkit-scrollbar-track]:bg-slate-700/[0.16] hover:[&::-webkit-scrollbar-thumb]:bg-slate-600/75">
-            {filteredLicenses.map(license => (
+      <Dropdown
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        trigger={
+          <div className="relative">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setIsOpen(true)}
+              placeholder="Search licenses..."
+              className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
+            />
+            {isOpen && (
               <button
-                key={license.id}
-                onClick={() => {
-                  handleLicenseToggle(license.id);
-                  setSearchTerm('');
-                }}
-                className={`w-full px-4 py-2.5 text-left hover:bg-white/5 transition-colors ${
-                  selectedLicenses.includes(license.id)
-                    ? 'bg-blue-500/10 text-blue-400'
-                    : 'text-slate-100'
-                }`}
+                onClick={() => setIsOpen(false)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
               >
-                <div className="text-sm font-medium">{license.name}</div>
-                <div className="text-xs text-slate-400 mt-0.5">{license.description}</div>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
               </button>
-            ))}
-            {filteredLicenses.length === 0 && (
-              <div className="px-4 py-2.5 text-sm text-slate-400">
-                No licenses found
-              </div>
             )}
           </div>
-        )}
-      </div>
+        }
+      >
+        <div className="bg-slate-800 border border-slate-700/50 rounded-xl shadow-xl max-h-[240px] overflow-y-auto [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-600/50 [&::-webkit-scrollbar-track]:bg-slate-700/[0.16] hover:[&::-webkit-scrollbar-thumb]:bg-slate-600/75">
+          {filteredLicenses.map(license => (
+            <button
+              key={license.id}
+              onClick={() => {
+                handleLicenseToggle(license.id);
+                setSearchTerm('');
+              }}
+              className={`w-full px-4 py-2.5 text-left hover:bg-white/5 transition-colors ${
+                selectedLicenses.includes(license.id)
+                  ? 'bg-blue-500/10 text-blue-400'
+                  : 'text-slate-100'
+              }`}
+            >
+              <div className="text-sm font-medium">{license.name}</div>
+              <div className="text-xs text-slate-400 mt-0.5">{license.description}</div>
+            </button>
+          ))}
+          {filteredLicenses.length === 0 && (
+            <div className="px-4 py-2.5 text-sm text-slate-400">
+              No licenses found
+            </div>
+          )}
+        </div>
+      </Dropdown>
     </div>
   );
 }; 

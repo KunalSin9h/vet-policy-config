@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Filter } from '../../types/policy';
 import { PackageRegistryLogo } from './PackageRegistryLogo';
+import { Dropdown } from '../Dropdown';
 
 interface PackageFilterProps {
   filter: Filter;
@@ -171,47 +172,49 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
       </div>
 
       {/* Add Package Button */}
-      <div className="relative">
-        <button
-          onClick={() => setIsEcosystemDropdownOpen(!isEcosystemDropdownOpen)}
-          className="px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/20 transition-colors flex items-center gap-2"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
-          Add Package
-        </button>
-
-        {isEcosystemDropdownOpen && (
-          <div className="absolute top-full mt-4 left-0 z-10 w-64 bg-slate-800 border border-slate-700/50 rounded-xl shadow-xl max-h-[240px] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-600/50 [&::-webkit-scrollbar-track]:bg-slate-700/[0.16] hover:[&::-webkit-scrollbar-thumb]:bg-slate-600/75">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search ecosystems..."
-              className="w-full px-4 py-2.5 bg-white/5 border-b border-slate-700/50 text-sm focus:outline-none placeholder-slate-400 text-slate-100"
-            />
-            {filteredEcosystems.map(ecosystem => (
-              <button
-                key={ecosystem.id}
-                onClick={() => handleEcosystemSelect(ecosystem.id)}
-                className="w-full px-4 py-2.5 text-left hover:bg-white/5 transition-colors text-slate-100 flex items-center gap-2"
-              >
-                <PackageRegistryLogo ecosystem={ecosystem.id} className="h-4 w-4 text-slate-300" />
-                <div>
-                  <div className="text-sm font-medium">{ecosystem.name}</div>
-                  <div className="text-xs text-slate-400 mt-0.5">{ecosystem.description}</div>
-                </div>
-              </button>
-            ))}
-            {filteredEcosystems.length === 0 && (
-              <div className="px-4 py-2.5 text-sm text-slate-400">
-                No ecosystems found
+      <Dropdown
+        isOpen={isEcosystemDropdownOpen}
+        onClose={() => setIsEcosystemDropdownOpen(false)}
+        trigger={
+          <button
+            onClick={() => setIsEcosystemDropdownOpen(!isEcosystemDropdownOpen)}
+            className="px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/20 transition-colors flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+            </svg>
+            Add Package
+          </button>
+        }
+      >
+        <div className="bg-slate-800 border border-slate-700/50 rounded-xl shadow-xl max-h-[240px] overflow-y-auto [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-600/50 [&::-webkit-scrollbar-track]:bg-slate-700/[0.16] hover:[&::-webkit-scrollbar-thumb]:bg-slate-600/75">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search ecosystems..."
+            className="w-full px-4 py-2.5 bg-white/5 border-b border-slate-700/50 text-sm focus:outline-none placeholder-slate-400 text-slate-100"
+          />
+          {filteredEcosystems.map(ecosystem => (
+            <button
+              key={ecosystem.id}
+              onClick={() => handleEcosystemSelect(ecosystem.id)}
+              className="w-full px-4 py-2.5 text-left hover:bg-white/5 transition-colors text-slate-100 flex items-center gap-2"
+            >
+              <PackageRegistryLogo ecosystem={ecosystem.id} className="h-4 w-4 text-slate-300" />
+              <div>
+                <div className="text-sm font-medium">{ecosystem.name}</div>
+                <div className="text-xs text-slate-400 mt-0.5">{ecosystem.description}</div>
               </div>
-            )}
-          </div>
-        )}
-      </div>
+            </button>
+          ))}
+          {filteredEcosystems.length === 0 && (
+            <div className="px-4 py-2.5 text-sm text-slate-400">
+              No ecosystems found
+            </div>
+          )}
+        </div>
+      </Dropdown>
     </div>
   );
 }; 
