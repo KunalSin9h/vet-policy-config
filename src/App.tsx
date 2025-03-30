@@ -6,6 +6,7 @@ import { TagInput } from './components/TagInput';
 import { FilterTypeSelector } from './components/FilterTypeSelector';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import MobileWarning from './components/MobileWarning';
 
 const getDefaultFilter = (type: CheckType): Filter => ({
   name: type === CheckType.CheckTypeVulnerability ? 'Vulnerability Check' :
@@ -38,6 +39,16 @@ function App() {
   });
 
   const [isFilterTypeSelectorOpen, setIsFilterTypeSelectorOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -84,6 +95,10 @@ function App() {
     }
     handleFilterSuiteChange('filters', [...filterSuite.filters, getDefaultFilter(type)]);
   };
+
+  if (isMobile) {
+    return <MobileWarning />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 flex flex-col">
