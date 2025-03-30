@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Filter } from '../../types/policy';
 import { Dropdown } from '../Dropdown';
 
@@ -30,18 +30,6 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleLicenseToggle = (licenseId: string) => {
     const currentLicenses = filter.options?.license?.allowed || [];
@@ -71,7 +59,7 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
   const selectedLicenses = filter.options?.license?.allowed || [];
 
   return (
-    <div className="space-y-2" ref={dropdownRef}>
+    <div className="space-y-2">
       <label className="block text-sm font-medium text-slate-300">Contains License</label>
       
       {/* Selected Licenses */}

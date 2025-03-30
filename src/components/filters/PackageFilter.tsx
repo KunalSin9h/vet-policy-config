@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Filter } from '../../types/policy';
 import { PackageRegistryLogo } from './PackageRegistryLogo';
 import { Dropdown } from '../Dropdown';
@@ -28,20 +28,8 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
 }) => {
   const [isEcosystemDropdownOpen, setIsEcosystemDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const packages = filter.options?.package?.packages || [];
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsEcosystemDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleEcosystemSelect = (ecosystemId: string) => {
     const newPackage: PackageDetails = {
@@ -123,7 +111,7 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
   );
 
   return (
-    <div className="space-y-4" ref={dropdownRef}>
+    <div className="space-y-4">
       {/* Package List */}
       <div className="space-y-3">
         {packages.map((pkg, index) => (
