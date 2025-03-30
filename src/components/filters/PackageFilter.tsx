@@ -183,7 +183,7 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
         </button>
 
         {isEcosystemDropdownOpen && (
-          <div className="absolute z-10 w-64 mt-1 bg-slate-800 border border-slate-700/50 rounded-xl shadow-xl max-h-64 overflow-y-auto">
+          <div className="absolute top-full mt-4 left-0 z-10 w-64 bg-slate-800 border border-slate-700/50 rounded-xl shadow-xl max-h-[240px] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-600/50 [&::-webkit-scrollbar-track]:bg-slate-700/[0.16] hover:[&::-webkit-scrollbar-thumb]:bg-slate-600/75">
             <input
               type="text"
               value={searchTerm}
