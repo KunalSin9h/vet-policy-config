@@ -14,12 +14,12 @@ const getDefaultFilter = (type: CheckType): Filter => ({
         type === CheckType.CheckTypeSecurityScorecard ? 'Scorecard Check' :
         type === CheckType.CheckTypeMaintenance ? 'Project Check' :
         type === CheckType.CheckTypeProject ? 'Project Check' :
-        type === CheckType.CheckTypeMalware ? 'Malware Check' : 'Package Check',
+        type === CheckType.CheckTypeOther ? 'Package Check' : 'Package Check',
   value: type === CheckType.CheckTypeVulnerability ? '' :
          type === CheckType.CheckTypeLicense ? '' :
          type === CheckType.CheckTypeSecurityScorecard ? '' :
          type === CheckType.CheckTypeMaintenance ? '' :
-         type === CheckType.CheckTypeMalware ? '' : '',
+         type === CheckType.CheckTypeOther ? '' : '',
   check_type: type,
   references: [],
   tags: [],
@@ -27,7 +27,7 @@ const getDefaultFilter = (type: CheckType): Filter => ({
     vulnerability: {
       severity: [],
     },
-  } : type === CheckType.CheckTypeMalware ? {
+  } : type === CheckType.CheckTypeOther ? {
     package: {
       packages: [],
     },

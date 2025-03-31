@@ -33,7 +33,7 @@ export const CHECK_TYPE_LABELS: Record<CheckType, string> = {
   [CheckType.CheckTypeSecurityScorecard]: 'Security Scorecard',
   [CheckType.CheckTypeLicense]: 'License',
   [CheckType.CheckTypeProject]: 'Project',
-  [CheckType.CheckTypeOther]: 'Other',
+  [CheckType.CheckTypeOther]: 'Others',
 };
 
 export interface VulnerabilityOptions {
