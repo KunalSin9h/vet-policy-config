@@ -8,20 +8,36 @@ interface LicenseFilterProps {
 }
 
 const COMMON_LICENSES = [
+  // Permissive Licenses
   { id: 'MIT', name: 'MIT License', description: 'A permissive license that allows for reuse with few restrictions' },
   { id: 'Apache-2.0', name: 'Apache License 2.0', description: 'A permissive license with patent protection' },
-  { id: 'GPL-3.0', name: 'GNU General Public License v3.0', description: 'A copyleft license that requires source code disclosure' },
-  { id: 'GPL-3.0-only', name: 'GNU General Public License v3.0 only', description: 'A copyleft license that requires source code disclosure (GPL-3.0 only)' },
-  { id: 'GPL-2.0', name: 'GNU General Public License v2.0', description: 'A copyleft license that requires source code disclosure' },
-  { id: 'GPL-2.0-only', name: 'GNU General Public License v2.0 only', description: 'A copyleft license that requires source code disclosure (GPL-2.0 only)' },
-  { id: 'LGPL-3.0', name: 'GNU Lesser General Public License v3.0', description: 'A copyleft license that allows linking with proprietary software' },
   { id: 'BSD-3-Clause', name: 'BSD 3-Clause License', description: 'A permissive license with minimal restrictions' },
-  { id: 'BSD-3-Clause OR GPL-2.0', name: 'BSD 3-Clause OR GPL-2.0', description: 'Choice between BSD 3-Clause or GPL-2.0 licenses' },
   { id: 'BSD-2-Clause', name: 'BSD 2-Clause License', description: 'A simplified BSD license' },
   { id: 'ISC', name: 'ISC License', description: 'A simplified BSD-style license' },
+  { id: 'Python-2.0', name: 'Python License 2.0', description: 'License for Python and its standard libraries' },
+  { id: 'PostgreSQL', name: 'PostgreSQL License', description: 'A liberal Open Source license' },
+  
+  // Copyleft Licenses
+  { id: 'GPL-3.0-only', name: 'GNU GPL v3.0 only', description: 'Strong copyleft license, version 3.0 only' },
+  { id: 'GPL-3.0-or-later', name: 'GNU GPL v3.0 or later', description: 'Strong copyleft license, version 3.0 or later' },
+  { id: 'GPL-2.0-only', name: 'GNU GPL v2.0 only', description: 'Strong copyleft license, version 2.0 only' },
+  { id: 'GPL-2.0-or-later', name: 'GNU GPL v2.0 or later', description: 'Strong copyleft license, version 2.0 or later' },
+  { id: 'LGPL-3.0-only', name: 'GNU LGPL v3.0 only', description: 'Lesser GPL version 3.0 only' },
+  { id: 'LGPL-3.0-or-later', name: 'GNU LGPL v3.0 or later', description: 'Lesser GPL version 3.0 or later' },
+  { id: 'LGPL-2.1-only', name: 'GNU LGPL v2.1 only', description: 'Lesser GPL version 2.1 only' },
+  { id: 'LGPL-2.1-or-later', name: 'GNU LGPL v2.1 or later', description: 'Lesser GPL version 2.1 or later' },
+  { id: 'AGPL-3.0-only', name: 'GNU AGPL v3.0 only', description: 'Affero GPL version 3.0 only' },
+  { id: 'AGPL-3.0-or-later', name: 'GNU AGPL v3.0 or later', description: 'Affero GPL version 3.0 or later' },
   { id: 'MPL-2.0', name: 'Mozilla Public License 2.0', description: 'A file-level copyleft license' },
-  { id: 'AGPL-3.0', name: 'GNU Affero General Public License v3.0', description: 'A copyleft license for network services' },
-  { id: 'Unlicense', name: 'The Unlicense', description: 'A public domain dedication' }
+  
+  // Other Common Licenses
+  { id: 'EPL-2.0', name: 'Eclipse Public License 2.0', description: 'Commercial-friendly copyleft license' },
+  { id: 'AFL-3.0', name: 'Academic Free License v3.0', description: 'Academic Free License' },
+  { id: 'Artistic-2.0', name: 'Artistic License 2.0', description: 'Perl-friendly license' },
+  { id: 'BSL-1.0', name: 'Boost Software License 1.0', description: 'Simple permissive license' },
+  { id: 'CC0-1.0', name: 'Creative Commons Zero v1.0', description: 'Public domain dedication' },
+  { id: 'Unlicense', name: 'The Unlicense', description: 'Public domain dedication' },
+  { id: 'OSL-3.0', name: 'Open Software License 3.0', description: 'Copyleft license with patent rights' }
 ];
 
 export const LicenseFilter: React.FC<LicenseFilterProps> = ({
@@ -53,14 +69,15 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
 
   const filteredLicenses = COMMON_LICENSES.filter(license =>
     license.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    license.id.toLowerCase().includes(searchTerm.toLowerCase())
+    license.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    license.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const selectedLicenses = filter.options?.license?.allowed || [];
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-slate-300">Contains License</label>
+      <label className="block text-sm font-medium text-slate-300">Contains License (SPDX Identifiers)</label>
       
       {/* Selected Licenses */}
       <div className="flex flex-wrap gap-2 mb-2">
@@ -94,7 +111,7 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onFocus={() => setIsOpen(true)}
-              placeholder="Search licenses..."
+              placeholder="Search SPDX licenses..."
               className="w-full px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 placeholder-slate-400 text-slate-100 transition-colors"
             />
             {isOpen && (
