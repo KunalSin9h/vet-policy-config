@@ -77,7 +77,7 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-slate-300">Contains License (SPDX Identifiers)</label>
+      <label className="block text-sm font-medium text-slate-300">Contains License</label>
       
       {/* Selected Licenses */}
       <div className="flex flex-wrap gap-2 mb-2">
