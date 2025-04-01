@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Filter } from '../../types/policy';
+import { PackageFilter as PackageFilterType } from '../../types/filters';
 import { PackageRegistryLogo } from './PackageRegistryLogo';
 import { Dropdown } from '../Dropdown';
 
 interface PackageFilterProps {
-  filter: Filter;
-  onUpdate: (updatedFilter: Filter) => void;
+  filter: PackageFilterType;
+  onUpdate: (updatedFilter: PackageFilterType) => void;
 }
 
 interface PackageDetails {
@@ -29,7 +29,7 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
   const [isEcosystemDropdownOpen, setIsEcosystemDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const packages = filter.options?.package?.packages || [];
+  const packages = filter.options.packages;
 
   const handleEcosystemSelect = (ecosystemId: string) => {
     const newPackage: PackageDetails = {
@@ -40,10 +40,7 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
     onUpdate({
       ...filter,
       options: {
-        ...filter.options,
-        package: {
-          packages: [...packages, newPackage],
-        },
+        packages: [...packages, newPackage],
       },
       value: generateFilterValue([...packages, newPackage]),
     });
@@ -61,10 +58,7 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
     onUpdate({
       ...filter,
       options: {
-        ...filter.options,
-        package: {
-          packages: updatedPackages,
-        },
+        packages: updatedPackages,
       },
       value: generateFilterValue(updatedPackages),
     });
@@ -75,10 +69,7 @@ export const PackageFilter: React.FC<PackageFilterProps> = ({
     onUpdate({
       ...filter,
       options: {
-        ...filter.options,
-        package: {
-          packages: updatedPackages,
-        },
+        packages: updatedPackages,
       },
       value: generateFilterValue(updatedPackages),
     });

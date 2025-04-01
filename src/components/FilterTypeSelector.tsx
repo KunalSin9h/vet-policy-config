@@ -1,15 +1,15 @@
 import React from 'react';
-import { CheckType } from '../types/policy';
+import { FilterType } from '../types/filters';
 
 interface FilterTypeSelectorProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelect: (type: CheckType) => void;
+  onSelect: (type: FilterType) => void;
 }
 
 const FILTER_TYPES = [
   {
-    type: CheckType.CheckTypeOther,
+    type: FilterType.Package,
     label: 'Package',
     description: 'Filter based on package properties',
     icon: (
@@ -19,7 +19,7 @@ const FILTER_TYPES = [
     )
   },
   {
-    type: CheckType.CheckTypeVulnerability,
+    type: FilterType.Vulnerability,
     label: 'Vulnerability',
     description: 'Filter based on security vulnerabilities',
     icon: (
@@ -29,7 +29,7 @@ const FILTER_TYPES = [
     )
   },
   {
-    type: CheckType.CheckTypeSecurityScorecard,
+    type: FilterType.Scorecard,
     label: 'Scorecard',
     description: 'Filter based on OpenSSF Scorecard metrics',
     icon: (
@@ -39,7 +39,7 @@ const FILTER_TYPES = [
     )
   },
   {
-    type: CheckType.CheckTypeProject,
+    type: FilterType.Project,
     label: 'Projects',
     description: 'Filter based on project-specific criteria',
     icon: (
@@ -49,7 +49,7 @@ const FILTER_TYPES = [
     )
   },
   {
-    type: CheckType.CheckTypeLicense,
+    type: FilterType.License,
     label: 'Licenses',
     description: 'Filter based on package licenses',
     icon: (

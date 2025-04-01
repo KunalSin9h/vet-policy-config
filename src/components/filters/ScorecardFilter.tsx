@@ -1,9 +1,9 @@
 import React, { useState, JSX } from 'react';
-import { Filter } from '../../types/policy';
+import { ScorecardFilter as ScorecardFilterType } from '../../types/filters';
 
 interface ScorecardFilterProps {
-  filter: Filter;
-  onUpdate: (updatedFilter: Filter) => void;
+  filter: ScorecardFilterType;
+  onUpdate: (updatedFilter: ScorecardFilterType) => void;
 }
 
 interface ScoreOption {

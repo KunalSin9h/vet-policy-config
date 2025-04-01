@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Filter, CHECK_TYPE_LABELS } from '../types/policy';
+import { CHECK_TYPE_LABELS, CheckType } from '../types/policy';
+import { Filter, FilterType } from '../types/filters';
 import { TagInput } from './TagInput';
 import { FilterTypeFactory } from './filters/FilterTypeFactory';
 
@@ -23,13 +24,31 @@ export const FilterEditor: React.FC<FilterEditorProps> = ({
     });
   };
 
+  const handleCheckTypeChange = (checkType: CheckType) => {
+    onUpdate({
+      ...filter,
+      checkType,
+    });
+  };
+
   return (
     <div className="bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-sm rounded-2xl border border-slate-700/30 p-6 shadow-xl shadow-slate-900/20">
       <div className="flex justify-between items-start mb-4">
         <div className="flex-1 space-y-4 mr-4">
-          <div className="flex items-center gap-2 px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl">
-            <span className="text-sm text-slate-400">Type:</span>
-            <span className="text-sm font-medium text-slate-100">{CHECK_TYPE_LABELS[filter.check_type]}</span>
+          <div className="flex items-center gap-2">
+            <div className="flex-1 px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl">
+              <span className="text-sm text-slate-400">Type:</span>
+              <span className="text-sm font-medium text-slate-100 ml-2">{filter.type}</span>
+            </div>
+            <select
+              value={filter.checkType}
+              onChange={(e) => handleCheckTypeChange(e.target.value as CheckType)}
+              className="px-4 py-2.5 bg-white/10 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20 focus:border-blue-400/40 text-slate-100 transition-colors"
+            >
+              {Object.entries(CHECK_TYPE_LABELS).map(([type, label]) => (
+                <option key={type} value={type}>{label}</option>
+              ))}
+            </select>
           </div>
           <input
             type="text"

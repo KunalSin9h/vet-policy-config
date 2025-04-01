@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Filter } from '../../types/policy';
+import { LicenseFilter as LicenseFilterType } from '../../types/filters';
 import { Dropdown } from '../Dropdown';
 
 interface LicenseFilterProps {
-  filter: Filter;
-  onUpdate: (updatedFilter: Filter) => void;
+  filter: LicenseFilterType;
+  onUpdate: (updatedFilter: LicenseFilterType) => void;
 }
 
 const COMMON_LICENSES = [
@@ -48,7 +48,7 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleLicenseToggle = (licenseId: string) => {
-    const currentLicenses = filter.options?.license?.allowed || [];
+    const currentLicenses = filter.options.allowed;
     const newLicenses = currentLicenses.includes(licenseId)
       ? currentLicenses.filter(id => id !== licenseId)
       : [...currentLicenses, licenseId];
@@ -56,10 +56,7 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
     onUpdate({
       ...filter,
       options: {
-        ...filter.options,
-        license: {
-          allowed: newLicenses,
-        },
+        allowed: newLicenses,
       },
       value: newLicenses.length > 0
         ? newLicenses.map(id => `      licenses.exists(p, p == "${id}")`).join(' ||\n') + (newLicenses.length > 1 ? '\n' : '')
@@ -73,7 +70,7 @@ export const LicenseFilter: React.FC<LicenseFilterProps> = ({
     license.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const selectedLicenses = filter.options?.license?.allowed || [];
+  const selectedLicenses = filter.options.allowed;
 
   return (
     <div className="space-y-2">

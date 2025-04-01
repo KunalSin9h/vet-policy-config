@@ -1,38 +1,20 @@
 import { useState, useEffect } from 'react';
 import { FilterEditor } from './components/FilterEditor';
 import { YamlPreview } from './components/YamlPreview';
-import { Filter, FilterSuite, CheckType } from './types/policy';
+import { CheckType } from './types/policy';
+import { Filter, FilterType, getDefaultFilter } from './types/filters';
 import { TagInput } from './components/TagInput';
 import { FilterTypeSelector } from './components/FilterTypeSelector';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import MobileWarning from './components/MobileWarning';
 
-const getDefaultFilter = (type: CheckType): Filter => ({
-  name: type === CheckType.CheckTypeVulnerability ? 'Vulnerability Check' :
-        type === CheckType.CheckTypeLicense ? 'License Check' :
-        type === CheckType.CheckTypeSecurityScorecard ? 'Scorecard Check' :
-        type === CheckType.CheckTypeMaintenance ? 'Project Check' :
-        type === CheckType.CheckTypeProject ? 'Project Check' :
-        type === CheckType.CheckTypeOther ? 'Package Check' : 'Package Check',
-  value: type === CheckType.CheckTypeVulnerability ? '' :
-         type === CheckType.CheckTypeLicense ? '' :
-         type === CheckType.CheckTypeSecurityScorecard ? '' :
-         type === CheckType.CheckTypeMaintenance ? '' :
-         type === CheckType.CheckTypeOther ? '' : '',
-  check_type: type,
-  references: [],
-  tags: [],
-  options: type === CheckType.CheckTypeVulnerability ? {
-    vulnerability: {
-      severity: [],
-    },
-  } : type === CheckType.CheckTypeOther ? {
-    package: {
-      packages: [],
-    },
-  } : undefined,
-});
+interface FilterSuite {
+  name: string;
+  description: string;
+  filters: Filter[];
+  tags: string[];
+}
 
 const MAX_FILTERS = 50;
 
@@ -98,7 +80,7 @@ function App() {
     handleFilterSuiteChange('filters', newFilters);
   };
 
-  const handleAddFilter = (type: CheckType) => {
+  const handleAddFilter = (type: FilterType) => {
     if (filterSuite.filters.length >= MAX_FILTERS) {
       alert('Maximum limit of 50 filters reached');
       return;
@@ -165,7 +147,7 @@ function App() {
             <div className="space-y-4">
               {filterSuite.filters.map((filter, index) => (
                 <FilterEditor
-                  key={index}
+                  key={filter.id}
                   filter={filter}
                   onUpdate={(updatedFilter) => handleFilterUpdate(index, updatedFilter)}
                   onDelete={() => handleFilterDelete(index)}
@@ -181,7 +163,35 @@ function App() {
 
           {/* YAML Preview */}
           <div className="lg:sticky lg:top-24 h-fit bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-sm rounded-2xl border border-slate-700/30 shadow-xl shadow-slate-900/20">
-            <YamlPreview filterSuite={filterSuite} />
+            <YamlPreview filterSuite={{
+              ...filterSuite,
+              filters: filterSuite.filters.map(filter => {
+                const policyFilter = {
+                  name: filter.name,
+                  value: filter.value,
+                  check_type: filter.checkType,
+                  summary: filter.summary,
+                  description: filter.description,
+                  references: filter.references,
+                  tags: filter.tags,
+                  options: {}
+                };
+
+                switch (filter.type) {
+                  case FilterType.Package:
+                    policyFilter.options = { package: filter.options };
+                    break;
+                  case FilterType.Vulnerability:
+                    policyFilter.options = { vulnerability: { severity: filter.options.severity } };
+                    break;
+                  case FilterType.License:
+                    policyFilter.options = { license: { allowed: filter.options.allowed } };
+                    break;
+                }
+
+                return policyFilter;
+              })
+            }} />
           </div>
         </div>
       </main>
@@ -191,10 +201,7 @@ function App() {
       <FilterTypeSelector
         isOpen={isFilterTypeSelectorOpen}
         onClose={() => setIsFilterTypeSelectorOpen(false)}
-        onSelect={(type) => {
-          handleAddFilter(type);
-          setIsFilterTypeSelectorOpen(false);
-        }}
+        onSelect={handleAddFilter}
       />
     </div>
   );
