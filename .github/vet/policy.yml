@@ -1,0 +1,15 @@
+name: Check for Vulnerability & Unmaintained packages
+filters:
+  - name: Vulnerability Check
+    check_type: CheckTypeVulnerability
+    value: |
+      vulns.all.exists(x, true)
+  - name: Scorecard Check
+    check_type: CheckTypeSecurityScorecard
+    value: |
+      scorecard.scores["Maintained"] > 0 && scorecard.scores["Maintained"] < 5
+  - name: Project Check
+    check_type: CheckTypeProject
+    value: |
+      projects.exists(p, p.type == "GITHUB") &&
+            projects.exists(p, p.stars < 10)
