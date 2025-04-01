@@ -68,7 +68,6 @@ export const getDefaultFilter = (type: FilterType): Filter => {
     id: crypto.randomUUID(),
     name: `${type} Check`,
     type,
-    checkType: CheckType.CheckTypeOther,
     value: '',
     references: [],
     tags: [],
@@ -79,6 +78,7 @@ export const getDefaultFilter = (type: FilterType): Filter => {
       return {
         ...baseFilter,
         type: FilterType.Package,
+        checkType: CheckType.CheckTypeOther,
         options: {
           packages: [],
         },
@@ -109,6 +109,7 @@ export const getDefaultFilter = (type: FilterType): Filter => {
       return {
         ...baseFilter,
         type: FilterType.Project,
+        checkType: CheckType.CheckTypeOther,
         options: {
           criteria: [],
         },
