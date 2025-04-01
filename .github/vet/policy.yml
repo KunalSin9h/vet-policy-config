@@ -7,9 +7,10 @@ filters:
   - name: Scorecard Check
     check_type: CheckTypeSecurityScorecard
     value: |
-      scorecard.scores["Maintained"] > 0 && scorecard.scores["Maintained"] < 5
+      scorecard.score < 5.0 &&
+            scorecard.scores["Maintained"] > 0 && scorecard.scores["Maintained"] < 5
   - name: Project Check
-    check_type: CheckTypeProject
+    check_type: CheckTypeOther
     value: |
       projects.exists(p, p.type == "GITHUB") &&
             projects.exists(p, p.stars < 10)
