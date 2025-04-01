@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Filter, FilterType } from '../types/filters';
+import { Filter } from '../types/filters';
 import { TagInput } from './TagInput';
 import { FilterTypeFactory } from './filters/FilterTypeFactory';
 

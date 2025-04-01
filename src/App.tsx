@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FilterEditor } from './components/FilterEditor';
 import { YamlPreview } from './components/YamlPreview';
-import { CheckType } from './types/policy';
 import { Filter, FilterType, getDefaultFilter } from './types/filters';
 import { TagInput } from './components/TagInput';
 import { FilterTypeSelector } from './components/FilterTypeSelector';
