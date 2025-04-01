@@ -7,6 +7,7 @@ const Footer: React.FC = () => {
         <div className="flex justify-between items-center">
           <div className="text-sm text-slate-400">
             {/* © {new Date().getFullYear()} SafeDep, Inc. All rights reserved. */}
+            This is Community Project, not affiliated with SafeDep in any form.
           </div>
           <div className="flex gap-4">
             <a 

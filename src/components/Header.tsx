@@ -28,7 +28,7 @@ const Header: React.FC = () => {
 
           <div className="flex items-center gap-4">
             <a 
-              href="https://github.com/safedep/vet" 
+              href="https://github.com/kunalsin9h/vet-policy-config" 
               target="_blank" 
               rel="noopener noreferrer"
               className="px-3 py-1.5 bg-slate-700/50 text-slate-200 rounded-lg text-sm font-medium hover:bg-slate-600/50 transition-colors flex items-center gap-2"
