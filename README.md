@@ -2,6 +2,9 @@
     <img src="https://github.com/user-attachments/assets/6c399870-4854-4dbd-83ff-c399b6a27435" />
 </div>
 
+> [!WARNING]
+> This project is not affiliated with [SafeDep](https://safedep.io) in any form, its a community project.
+
 ### Vet PolicyConfig
 
 Configuration UI for [Vet](https://github.com/safedep/vet)'s [filter suites](https://docs.safedep.io/advanced/policy-as-code).
